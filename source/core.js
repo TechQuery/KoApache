@@ -4,7 +4,7 @@ const Koa = require('koa'), Static = require('koa-static');
 
 const Logger = require('koa-logger'), CORS = require('@koa/cors');
 
-const Commander = require('commander'), IP = require('internal-ip');
+const Commander = require('commander'), IP = require('internal-ip'), open = require('opn');
 
 const config = require('../package.json');
 
@@ -12,6 +12,7 @@ Commander
     .version( config.version )
     .description( config.description )
     .arguments('[dir]')
+    .option('-o, --open',  'Open URL in default browser')
     .option('--CORS',  'Enable CORS middleware')
     .action( boot_server )
     .parse( process.argv );
@@ -27,22 +28,25 @@ function boot_server(dir = '.') {
 
     app.use( Static( dir ) );
 
-    app.listen(function () {
+    app.listen(async function () {
 
-        const address = Object.assign(this.address(), {
+        var address = Object.assign(this.address(), {
             family:     'IPv4',
             address:    IP.v4.sync()
         });
 
         if ( process.send )
-            process.send({
+            return process.send({
                 type:    'ready',
                 data:    address
             });
-        else
-            console.info(
-                `Web server runs at http://${address.address}:${address.port}`
-            );
+
+        address = `http://${address.address}:${address.port}`;
+
+        console.info(`Web server runs at ${address}`);
+
+        await open( address );
+
     }).on('error',  (error) => {
 
         if ( process.send )

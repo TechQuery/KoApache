@@ -1,10 +1,13 @@
 {
   "name": "koapache",
-  "version": "0.2.0",
-  "description": "A Web server which is easy to use in command-line or as a forked Child process",
+  "version": "0.2.1",
+  "description": "A Web server which is easy to use in command-line or as a forked Child process based on Koa",
   "main": "source/index.js",
   "bin": {
     "web-server": "source/core.js"
+  },
+  "engines": {
+    "node": "^7.6.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +20,9 @@
     "Web",
     "server",
     "command-line",
-    "worker"
+    "worker",
+    "koa",
+    "apache"
   ],
   "author": "shiy2008@gmail.com",
   "license": "LGPL-3.0",
@@ -31,6 +36,7 @@
     "internal-ip": "^3.0.1",
     "koa": "^2.5.0",
     "koa-logger": "^3.2.0",
-    "koa-static": "^4.0.2"
+    "koa-static": "^4.0.2",
+    "opn": "^5.3.0"
   }
 }
