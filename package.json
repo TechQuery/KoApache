@@ -1,6 +1,6 @@
 {
-  "name": "easy-web-server",
-  "version": "0.1.0",
+  "name": "koapache",
+  "version": "0.2.0",
   "description": "A Web server which is easy to use in command-line or as a forked Child process",
   "main": "source/index.js",
   "bin": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TechQuery/EasyWebServer.git"
+    "url": "git+https://github.com/TechQuery/KoApache.git"
   },
   "keywords": [
     "Web",
@@ -22,12 +22,15 @@
   "author": "shiy2008@gmail.com",
   "license": "LGPL-3.0",
   "bugs": {
-    "url": "https://github.com/TechQuery/EasyWebServer/issues"
+    "url": "https://github.com/TechQuery/KoApache/issues"
   },
-  "homepage": "https://github.com/TechQuery/EasyWebServer#readme",
+  "homepage": "https://github.com/TechQuery/KoApache#readme",
   "dependencies": {
+    "@koa/cors": "^2.2.1",
+    "commander": "^2.15.1",
     "internal-ip": "^3.0.1",
     "koa": "^2.5.0",
+    "koa-logger": "^3.2.0",
     "koa-static": "^4.0.2"
   }
 }

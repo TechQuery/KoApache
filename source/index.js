@@ -3,9 +3,16 @@
 const fork = require('child_process').fork, Path = require('path');
 
 
-module.exports = function (root = '.') {
+module.exports = function (root = '.',  CORS) {
 
-    const child = fork(require.resolve('./core'),  [ root ],  {execArgv: [ ]});
+    const child = fork(
+        require.resolve('./core'),
+        [root,  CORS && '--CORS'],
+        {
+            execArgv:    [ ],
+            silent:      true
+        }
+    );
 
     return  new Promise((resolve, reject) => {
 
