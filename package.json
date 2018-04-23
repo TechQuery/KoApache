@@ -1,0 +1,33 @@
+{
+  "name": "easy-web-server",
+  "version": "0.1.0",
+  "description": "A Web server which is easy to use in command-line or as a forked Child process",
+  "main": "source/index.js",
+  "bin": {
+    "web-server": "source/core.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechQuery/EasyWebServer.git"
+  },
+  "keywords": [
+    "Web",
+    "server",
+    "command-line",
+    "worker"
+  ],
+  "author": "shiy2008@gmail.com",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/TechQuery/EasyWebServer/issues"
+  },
+  "homepage": "https://github.com/TechQuery/EasyWebServer#readme",
+  "dependencies": {
+    "internal-ip": "^3.0.1",
+    "koa": "^2.5.0",
+    "koa-static": "^4.0.2"
+  }
+}
