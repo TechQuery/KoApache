@@ -1,6 +1,6 @@
 {
   "name": "koapache",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Web server which is easy to use in command-line or as a forked Child process based on Koa",
   "main": "source/index.js",
   "bin": {

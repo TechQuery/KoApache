@@ -3,11 +3,11 @@
 const fork = require('child_process').fork, Path = require('path');
 
 
-module.exports = function (root = '.',  CORS) {
+module.exports = function (root = '.',  port = 0,  CORS) {
 
     const child = fork(
         require.resolve('./core'),
-        [root,  CORS && '--CORS'],
+        [root,  '-p',  port,  CORS && '--CORS'],
         {
             execArgv:    [ ],
             silent:      true

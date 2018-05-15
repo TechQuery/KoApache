@@ -12,8 +12,12 @@ Commander
     .version( config.version )
     .description( config.description )
     .arguments('[dir]')
-    .option('-o, --open',  'Open URL in default browser')
+    .option(
+        '-p, --port <value>',
+        'Listening port number (support Environment variable name)'
+    )
     .option('--CORS',  'Enable CORS middleware')
+    .option('-o, --open',  'Open URL in default browser')
     .action( boot_server )
     .parse( process.argv );
 
@@ -22,13 +26,16 @@ if (! Commander.args[0])  boot_server.call( Commander );
 
 function boot_server(dir = '.') {
 
-    const app = (new Koa()).use( Logger() );
+    const app = (new Koa()).use( Logger() ),
+        port = (! this.port)  ?  0  :  (
+            isNaN( this.port )  ?  process.env[ this.port ]  :  +this.port
+        );
 
     if ( this.CORS )  app.use( CORS() );
 
     app.use( Static( dir ) );
 
-    app.listen(async function () {
+    app.listen(port,  async function () {
 
         var address = Object.assign(this.address(), {
             family:     'IPv4',
