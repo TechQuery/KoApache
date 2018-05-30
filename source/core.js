@@ -4,7 +4,9 @@ const Koa = require('koa'), Static = require('koa-static');
 
 const Logger = require('koa-logger'), CORS = require('@koa/cors');
 
-const Commander = require('commander'), IP = require('internal-ip'), open = require('opn');
+const Commander = require('commander'), IP = require('internal-ip');
+
+const URL_utility = require('url'), open = require('opn');
 
 const config = require('../package.json');
 
@@ -17,7 +19,10 @@ Commander
         'Listening port number (support Environment variable name)'
     )
     .option('--CORS',  'Enable CORS middleware')
-    .option('-o, --open',  'Open URL in default browser')
+    .option(
+        '-o, --open [path]',
+        'Open the Index or specific page in default browser'
+    )
     .action( boot_server )
     .parse( process.argv );
 
@@ -52,8 +57,11 @@ function boot_server(dir = '.') {
 
         console.info(`Web server runs at ${address}`);
 
-        await open( address );
-
+        if ( Commander.open )
+            await open(
+                (typeof Commander.open !== 'string')  ?
+                    address  :  URL_utility.resolve(address, Commander.open)
+            );
     }).on('error',  (error) => {
 
         if ( process.send )

@@ -1,6 +1,6 @@
 'use strict';
 
-const fork = require('child_process').fork, Path = require('path');
+const fork = require('child_process').fork;
 
 
 module.exports = function (root = '.',  port = 0,  CORS) {
