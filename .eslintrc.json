@@ -5,7 +5,8 @@
         "mocha": true
     },
     "parserOptions": {
-        "ecmaVersion": 8
+        "ecmaVersion": 8,
+        "sourceType": "module"
     },
     "extends": "eslint:recommended",
     "rules": {
@@ -18,6 +19,11 @@
         "no-cond-assign": "off",
         "no-console": ["error", {
             "allow": ["info", "warn", "error", "time", "timeEnd"]
+        }],
+        "valid-jsdoc": ["error", {
+            "requireParamDescription": false,
+            "requireReturn": false,
+            "requireReturnDescription": false
         }]
     }
 }

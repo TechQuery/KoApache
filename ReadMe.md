@@ -29,22 +29,36 @@ A Web server which is easy to use in command-line or as a forked Child process b
 ```Shell
 web-server ./path/of/public/folder/
 ```
-Execute `web-server -h` for the detail about more options.
+Help information output from `web-server -h`:
+
+    Usage: command [options] [dir]
+
+    A Web server which is easy to use in command-line or as a forked Child process based on Koa
+
+    Options:
+
+      -V, --version       output the version number
+      -p, --port <value>  Listening port number (support Environment variable name)
+      --CORS              Enable CORS middleware
+      -o, --open [path]   Open the Index or specific page in default browser
+      -h, --help          output usage information
 
 
 ### Module
 
 ```JavaScript
-(async () => {
+import WebServer from 'koapache';
 
-    const WebServer = require('koapache');
+const server = new WebServer(
+    './path/of/public/folder/',
+    'DOCKER_INTERNAL_PORT',        // Get listening port from Shell environment
+    true                           // enable CORS
+);
 
-    const address = await WebServer(
-        './path/of/public/folder/',
-        'DOCKER_INTERNAL_PORT',        // Get listening port from Shell environment
-        true                           // enable CORS
-    );
-
-    console.dir( address );
-})();
+server.workerHost().then(address  =>  console.dir( address ));
 ```
+
+
+## Typical case
+
+https://www.npmjs.com/browse/depended/koapache
