@@ -57,6 +57,8 @@ const server = new WebServer(
 
 server.workerHost().then(address  =>  console.dir( address ));
 ```
+API document is accessed through `npm start` (offline), `npm docs` (online) or [Official Website](https://techquery.github.io/KoApache/).
+
 
 
 ## Typical case

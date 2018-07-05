@@ -30,7 +30,7 @@ Commander
 
 
 const server = new WebServer(
-    Commander.args[0], Commander.port, Commander.CORS, { }, Commander.open
+    Commander.args[0], Commander.port, Commander.CORS, Commander.open
 );
 
 server.localHost();

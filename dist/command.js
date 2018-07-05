@@ -109,49 +109,76 @@ var _module_ = {
 
             var WebServer = function () {
                 /**
-                 * @param {?string}        staticPath
-                 * @param {number}         netPort
-                 * @param {boolean}        XDomain
-                 * @param {boolean|string} [openURL]
+                 * @param {string}         [staticPath='.']
+                 * @param {number}         [netPort=0]
+                 * @param {boolean}        [XDomain=false]
+                 * @param {boolean|string} [openURL=false]
                  */
                 function WebServer(staticPath, netPort, XDomain, openURL) {
                     _classCallCheck(this, WebServer);
 
+                    /**
+                     * @type {string}
+                     */
                     this.staticPath = staticPath || '.';
 
+                    /**
+                     * @type {number}
+                     */
                     this.netPort = !netPort ? 0 : isNaN(netPort) ? process.env[netPort] : +netPort;
 
+                    /**
+                     * @type {Application}
+                     */
                     this.core = new _koa2.default().use((0, _koaLogger2.default)());
 
-                    if (this.XDomain = XDomain) this.core.use((0, _cors2.default)());
+                    /**
+                     * @type {boolean}
+                     */
+                    this.XDomain = XDomain;
+
+                    if (XDomain) this.core.use((0, _cors2.default)());
 
                     this.core.use((0, _koaStatic2.default)(this.staticPath));
 
-                    this.openURL = openURL;
+                    /**
+                     * @type {boolean|string}
+                     */
+                    this.openPath = openURL;
 
+                    /**
+                     * @type {ServerAddress}
+                     */
                     this.address = null;
                 }
 
                 /**
-                 * Create a server in the same Node.JS process
+                 * Origin URI
                  *
-                 * @return {Server} HTTP server
+                 * @type {string}
                  */
 
 
                 _createClass(WebServer, [{
                     key: 'localHost',
+
+
+                    /**
+                     * Create a server in the same Node.JS process
+                     *
+                     * @return {Server} HTTP server
+                     */
                     value: function localHost() {
 
                         var server = this;
 
                         return this.core.listen(this.netPort, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                            var address;
                             return regeneratorRuntime.wrap(function _callee$(_context) {
                                 while (1) {
                                     switch (_context.prev = _context.next) {
                                         case 0:
-                                            address = Object.assign(this.address(), {
+
+                                            server.address = Object.assign(this.address(), {
                                                 family: 'IPv4',
                                                 address: _internalIp2.default.v4.sync()
                                             });
@@ -161,23 +188,21 @@ var _module_ = {
                                                 break;
                                             }
 
-                                            return _context.abrupt('return', process.send({ type: 'ready', data: address }));
+                                            return _context.abrupt('return', process.send({ type: 'ready', data: server.address }));
 
                                         case 3:
 
-                                            server.address = address = 'http://' + address.address + ':' + address.port;
+                                            console.info('Web server runs at ' + server.URL);
 
-                                            console.info('Web server runs at ' + address);
-
-                                            if (!server.openURL) {
-                                                _context.next = 8;
+                                            if (!server.openPath) {
+                                                _context.next = 7;
                                                 break;
                                             }
 
-                                            _context.next = 8;
-                                            return (0, _opn2.default)(typeof server.openURL !== 'string' ? address : (0, _url.resolve)(address, server.openURL));
+                                            _context.next = 7;
+                                            return (0, _opn2.default)(server.openURL);
 
-                                        case 8:
+                                        case 7:
                                         case 'end':
                                             return _context.stop();
                                     }
@@ -225,6 +250,27 @@ var _module_ = {
                             });
                         });
                     }
+                }, {
+                    key: 'URL',
+                    get: function get() {
+
+                        var address = this.address;
+
+                        return address ? 'http://' + address.address + ':' + address.port : '';
+                    }
+
+                    /**
+                     * URL to open in default browser
+                     *
+                     * @type {string}
+                     */
+
+                }, {
+                    key: 'openURL',
+                    get: function get() {
+
+                        return typeof this.openPath !== 'string' ? this.URL : (0, _url.resolve)(this.URL, this.openPath);
+                    }
                 }]);
 
                 return WebServer;
@@ -237,6 +283,9 @@ var _module_ = {
                                           * @property {string} address - IP address
                                           * @property {number} port    - Network listening port
                                           */
+            /**
+             * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application
+             */
         }
     },
     './command': {
@@ -265,7 +314,7 @@ var _module_ = {
 
             _commander2.default.version(config.version).description(config.description).arguments('[dir]').option('-p, --port <value>', 'Listening port number (support Environment variable name)').option('--CORS', 'Enable CORS middleware').option('-o, --open [path]', 'Open the Index or specific page in default browser').parse(process.argv);
 
-            var server = new _WebServer2.default(_commander2.default.args[0], _commander2.default.port, _commander2.default.CORS, {}, _commander2.default.open);
+            var server = new _WebServer2.default(_commander2.default.args[0], _commander2.default.port, _commander2.default.CORS, _commander2.default.open);
 
             server.localHost();
         }

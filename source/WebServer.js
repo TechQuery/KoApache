@@ -1,3 +1,6 @@
+/**
+ * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application
+ */
 import Koa from 'koa';
 
 import Logger from 'koa-logger';
@@ -22,28 +25,70 @@ import {fork} from 'child_process';
  */
 export default  class WebServer {
     /**
-     * @param {?string}        staticPath
-     * @param {number}         netPort
-     * @param {boolean}        XDomain
-     * @param {boolean|string} [openURL]
+     * @param {string}         [staticPath='.']
+     * @param {number}         [netPort=0]
+     * @param {boolean}        [XDomain=false]
+     * @param {boolean|string} [openURL=false]
      */
     constructor(staticPath, netPort, XDomain, openURL) {
-
+        /**
+         * @type {string}
+         */
         this.staticPath = staticPath || '.';
 
+        /**
+         * @type {number}
+         */
         this.netPort = (! netPort)  ?  0  :  (
             isNaN( netPort )  ?  process.env[ netPort ]  :  +netPort
         );
 
+        /**
+         * @type {Application}
+         */
         this.core = (new Koa()).use( Logger() );
 
-        if (this.XDomain = XDomain)  this.core.use( CORS() );
+        /**
+         * @type {boolean}
+         */
+        this.XDomain = XDomain;
+
+        if ( XDomain )  this.core.use( CORS() );
 
         this.core.use( Static( this.staticPath ) );
 
-        this.openURL = openURL;
+        /**
+         * @type {boolean|string}
+         */
+        this.openPath = openURL;
 
+        /**
+         * @type {ServerAddress}
+         */
         this.address = null;
+    }
+
+    /**
+     * Origin URI
+     *
+     * @type {string}
+     */
+    get URL() {
+
+        const address = this.address;
+
+        return  address ? `http://${address.address}:${address.port}` : '';
+    }
+
+    /**
+     * URL to open in default browser
+     *
+     * @type {string}
+     */
+    get openURL() {
+
+        return  (typeof this.openPath !== 'string')  ?
+            this.URL  :  resolve(this.URL, this.openPath);
     }
 
     /**
@@ -57,23 +102,18 @@ export default  class WebServer {
 
         return  this.core.listen(this.netPort,  async function () {
 
-            var address = Object.assign(this.address(), {
+            server.address = Object.assign(this.address(), {
                 family:     'IPv4',
                 address:    IP.v4.sync()
             });
 
             if ( process.send )
-                return  process.send({type: 'ready', data: address});
+                return  process.send({type: 'ready', data: server.address});
 
-            server.address = address = `http://${address.address}:${address.port}`;
+            console.info(`Web server runs at ${server.URL}`);
 
-            console.info(`Web server runs at ${address}`);
+            if ( server.openPath )  await open( server.openURL );
 
-            if ( server.openURL )
-                await open(
-                    (typeof server.openURL !== 'string')  ?
-                        address  :  resolve(address, server.openURL)
-                );
         }).on('error',  (error) => {
 
             if ( process.send )

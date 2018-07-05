@@ -1,0 +1,999 @@
+[
+  {
+    "__docId__": 1,
+    "kind": "external",
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Infinity",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 2,
+    "kind": "external",
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~NaN",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 3,
+    "kind": "external",
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~undefined",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 4,
+    "kind": "external",
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~null",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 5,
+    "kind": "external",
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 6,
+    "kind": "external",
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 7,
+    "kind": "external",
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 8,
+    "kind": "external",
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 9,
+    "kind": "external",
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 10,
+    "kind": "external",
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 11,
+    "kind": "external",
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Symbol",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 12,
+    "kind": "external",
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Error",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 13,
+    "kind": "external",
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~EvalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 14,
+    "kind": "external",
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~InternalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 15,
+    "kind": "external",
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~RangeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 16,
+    "kind": "external",
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~ReferenceError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 17,
+    "kind": "external",
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~SyntaxError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 18,
+    "kind": "external",
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~TypeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 19,
+    "kind": "external",
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~URIError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 20,
+    "kind": "external",
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 21,
+    "kind": "external",
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 22,
+    "kind": "external",
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Date",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 23,
+    "kind": "external",
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~String",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 24,
+    "kind": "external",
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~string",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 25,
+    "kind": "external",
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~RegExp",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 26,
+    "kind": "external",
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 27,
+    "kind": "external",
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Int8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 28,
+    "kind": "external",
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Uint8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 29,
+    "kind": "external",
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Uint8ClampedArray",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 30,
+    "kind": "external",
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Int16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 31,
+    "kind": "external",
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Uint16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 32,
+    "kind": "external",
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Int32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 33,
+    "kind": "external",
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Uint32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 34,
+    "kind": "external",
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Float32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 35,
+    "kind": "external",
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Float64Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 36,
+    "kind": "external",
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Map",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 37,
+    "kind": "external",
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Set",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 38,
+    "kind": "external",
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~WeakMap",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 39,
+    "kind": "external",
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~WeakSet",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 40,
+    "kind": "external",
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~ArrayBuffer",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 41,
+    "kind": "external",
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~DataView",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 42,
+    "kind": "external",
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~JSON",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 43,
+    "kind": "external",
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Promise",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 44,
+    "kind": "external",
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Generator",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 45,
+    "kind": "external",
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~GeneratorFunction",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 46,
+    "kind": "external",
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Reflect",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 47,
+    "kind": "external",
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "source/.external-ecmascript.js",
+    "static": true,
+    "longname": "source/.external-ecmascript.js~Proxy",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 49,
+    "kind": "external",
+    "name": "http~ClientRequest",
+    "externalLink": "https://nodejs.org/dist/latest/docs/api/http.html#http_class_http_clientrequest",
+    "memberof": "source/.external-nodejs.js",
+    "static": true,
+    "longname": "source/.external-nodejs.js~http~ClientRequest",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 50,
+    "kind": "file",
+    "name": "source/command.js",
+    "content": "import 'babel-polyfill';\n\nimport Commander from 'commander';\n\nimport WebServer from './WebServer';\n\nimport { join } from 'path';\n\nimport { readFileSync } from 'fs';\n\nconst config = JSON.parse(\n    readFileSync( join(process.argv[1], '../../package.json') )\n);\n\n\nCommander\n    .version( config.version )\n    .description( config.description )\n    .arguments('[dir]')\n    .option(\n        '-p, --port <value>',\n        'Listening port number (support Environment variable name)'\n    )\n    .option('--CORS',  'Enable CORS middleware')\n    .option(\n        '-o, --open [path]',\n        'Open the Index or specific page in default browser'\n    )\n    .parse( process.argv );\n\n\nconst server = new WebServer(\n    Commander.args[0], Commander.port, Commander.CORS, Commander.open\n);\n\nserver.localHost();\n",
+    "static": true,
+    "longname": "D:/TechQuery/KoApache/source/command.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 51,
+    "kind": "variable",
+    "name": "config",
+    "memberof": "source/command.js",
+    "static": true,
+    "longname": "source/command.js~config",
+    "access": "public",
+    "export": false,
+    "importPath": "koapache/source/command.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 52,
+    "kind": "variable",
+    "name": "server",
+    "memberof": "source/command.js",
+    "static": true,
+    "longname": "source/command.js~server",
+    "access": "public",
+    "export": false,
+    "importPath": "koapache/source/command.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 32,
+    "undocument": true,
+    "type": {
+      "types": [
+        "source/WebServer.js~WebServer"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 53,
+    "kind": "file",
+    "name": "source/WebServer.js",
+    "content": "/**\n * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application\n */\nimport Koa from 'koa';\n\nimport Logger from 'koa-logger';\n\nimport CORS from '@koa/cors';\n\nimport Static from 'koa-static';\n\nimport IP from 'internal-ip';\n\nimport open from 'opn';\n\nimport {resolve} from 'url';\n\nimport { join } from 'path';\n\nimport {fork} from 'child_process';\n\n\n/**\n * Web server\n */\nexport default  class WebServer {\n    /**\n     * @param {string}         [staticPath='.']\n     * @param {number}         [netPort=0]\n     * @param {boolean}        [XDomain=false]\n     * @param {boolean|string} [openURL=false]\n     */\n    constructor(staticPath, netPort, XDomain, openURL) {\n        /**\n         * @type {string}\n         */\n        this.staticPath = staticPath || '.';\n\n        /**\n         * @type {number}\n         */\n        this.netPort = (! netPort)  ?  0  :  (\n            isNaN( netPort )  ?  process.env[ netPort ]  :  +netPort\n        );\n\n        /**\n         * @type {Application}\n         */\n        this.core = (new Koa()).use( Logger() );\n\n        /**\n         * @type {boolean}\n         */\n        this.XDomain = XDomain;\n\n        if ( XDomain )  this.core.use( CORS() );\n\n        this.core.use( Static( this.staticPath ) );\n\n        /**\n         * @type {boolean|string}\n         */\n        this.openPath = openURL;\n\n        /**\n         * @type {ServerAddress}\n         */\n        this.address = null;\n    }\n\n    /**\n     * Origin URI\n     *\n     * @type {string}\n     */\n    get URL() {\n\n        const address = this.address;\n\n        return  address ? `http://${address.address}:${address.port}` : '';\n    }\n\n    /**\n     * URL to open in default browser\n     *\n     * @type {string}\n     */\n    get openURL() {\n\n        return  (typeof this.openPath !== 'string')  ?\n            this.URL  :  resolve(this.URL, this.openPath);\n    }\n\n    /**\n     * Create a server in the same Node.JS process\n     *\n     * @return {Server} HTTP server\n     */\n    localHost() {\n\n        const server = this;\n\n        return  this.core.listen(this.netPort,  async function () {\n\n            server.address = Object.assign(this.address(), {\n                family:     'IPv4',\n                address:    IP.v4.sync()\n            });\n\n            if ( process.send )\n                return  process.send({type: 'ready', data: server.address});\n\n            console.info(`Web server runs at ${server.URL}`);\n\n            if ( server.openPath )  await open( server.openURL );\n\n        }).on('error',  (error) => {\n\n            if ( process.send )\n                process.send({\n                    type:    'error',\n                    data:    error\n                });\n            else\n                console.error( error );\n        });\n    }\n\n    /**\n     * Boot a server in a forked Node.JS process\n     *\n     * @return {Promise<ServerAddress>}\n     */\n    workerHost() {\n\n        const child = fork(\n            join(process.argv[0], '../../dist/command'),\n            [this.staticPath,  '-p',  this.netPort,  this.XDomain && '--CORS'],\n            {\n                execArgv:  [ ],\n                silent:    true\n            }\n        );\n\n        return  new Promise((resolve, reject) => {\n\n            child.on('message',  event => {\n\n                switch ( event.type ) {\n                    case 'ready':    return  resolve( event.data );\n                    case 'error':    {\n\n                        let error = event.data;\n\n                        reject(Object.assign(\n                            new global[ error.name ]( error.message ),  error\n                        ));\n                    }\n                }\n            });\n        });\n    }\n}\n\n/**\n * @typedef {Object} ServerAddress\n *\n * @property {string} family  - `IPv4`\n * @property {string} address - IP address\n * @property {number} port    - Network listening port\n */\n",
+    "static": true,
+    "longname": "D:/TechQuery/KoApache/source/WebServer.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 54,
+    "kind": "external",
+    "name": "Application",
+    "externalLink": "https://github.com/koajs/koa/blob/master/docs/api/index.md#application",
+    "memberof": "source/WebServer.js",
+    "static": true,
+    "longname": "source/WebServer.js~Application",
+    "access": "public",
+    "description": "",
+    "lineNumber": 4
+  },
+  {
+    "__docId__": 55,
+    "kind": "class",
+    "name": "WebServer",
+    "memberof": "source/WebServer.js",
+    "static": true,
+    "longname": "source/WebServer.js~WebServer",
+    "access": "public",
+    "export": true,
+    "importPath": "koapache",
+    "importStyle": "WebServer",
+    "description": "Web server",
+    "lineNumber": 26,
+    "interface": false
+  },
+  {
+    "__docId__": 56,
+    "kind": "typedef",
+    "name": "ServerAddress",
+    "memberof": "source/WebServer.js",
+    "static": true,
+    "longname": "source/WebServer.js~ServerAddress",
+    "access": "public",
+    "description": "",
+    "properties": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "family",
+        "description": "`IPv4`"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "address",
+        "description": "IP address"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "port",
+        "description": "Network listening port"
+      }
+    ],
+    "type": {
+      "types": [
+        "Object"
+      ],
+      "optional": false,
+      "name": "ServerAddress"
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "source/WebServer.js~WebServer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#constructor",
+    "access": "public",
+    "description": "",
+    "lineNumber": 33,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "'.'",
+        "defaultRaw": "'.'",
+        "name": "staticPath",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
+        "name": "netPort",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "XDomain",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean",
+          "string"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "openURL",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "__docId__": 58,
+    "kind": "member",
+    "name": "staticPath",
+    "memberof": "source/WebServer.js~WebServer",
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#staticPath",
+    "access": "public",
+    "description": "",
+    "lineNumber": 37,
+    "type": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "name": "netPort",
+    "memberof": "source/WebServer.js~WebServer",
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#netPort",
+    "access": "public",
+    "description": "",
+    "lineNumber": 42,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "name": "core",
+    "memberof": "source/WebServer.js~WebServer",
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#core",
+    "access": "public",
+    "description": "",
+    "lineNumber": 49,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Application"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "member",
+    "name": "XDomain",
+    "memberof": "source/WebServer.js~WebServer",
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#XDomain",
+    "access": "public",
+    "description": "",
+    "lineNumber": 54,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "member",
+    "name": "openPath",
+    "memberof": "source/WebServer.js~WebServer",
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#openPath",
+    "access": "public",
+    "description": "",
+    "lineNumber": 63,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean",
+        "string"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "member",
+    "name": "address",
+    "memberof": "source/WebServer.js~WebServer",
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#address",
+    "access": "public",
+    "description": "",
+    "lineNumber": 68,
+    "type": {
+      "nullable": null,
+      "types": [
+        "ServerAddress"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 64,
+    "kind": "get",
+    "name": "URL",
+    "memberof": "source/WebServer.js~WebServer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#URL",
+    "access": "public",
+    "description": "Origin URI",
+    "lineNumber": 76,
+    "type": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 65,
+    "kind": "get",
+    "name": "openURL",
+    "memberof": "source/WebServer.js~WebServer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#openURL",
+    "access": "public",
+    "description": "URL to open in default browser",
+    "lineNumber": 88,
+    "type": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 66,
+    "kind": "method",
+    "name": "localHost",
+    "memberof": "source/WebServer.js~WebServer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#localHost",
+    "access": "public",
+    "description": "Create a server in the same Node.JS process",
+    "lineNumber": 99,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Server"
+      ],
+      "spread": false,
+      "description": "HTTP server"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 67,
+    "kind": "method",
+    "name": "workerHost",
+    "memberof": "source/WebServer.js~WebServer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "source/WebServer.js~WebServer#workerHost",
+    "access": "public",
+    "description": "Boot a server in a forked Node.JS process",
+    "lineNumber": 134,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise<ServerAddress>"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
+  },
+  {
+    "kind": "index",
+    "content": "# KoApache\n\nA Web server which is easy to use in command-line or as a forked Child process based on [Koa](http://koajs.com/).\n\n[![NPM Dependency](https://david-dm.org/TechQuery/KoApache.svg)](https://david-dm.org/TechQuery/KoApache)\n\n[![NPM](https://nodei.co/npm/koapache.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/koapache/)\n\n\n\n## Feature\n\n 1. `index.html` omissible in URL\n\n 2. Log **HTTP request & response** in Command-line output\n\n 3. **Listening port** supports *Random*, *Number* or *Environment variable name*\n\n 4. Support **CORS** headers\n\n 5. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode\n\n\n\n## Usage\n\n### Command-line\n\n```Shell\nweb-server ./path/of/public/folder/\n```\nHelp information output from `web-server -h`:\n\n    Usage: command [options] [dir]\n\n    A Web server which is easy to use in command-line or as a forked Child process based on Koa\n\n    Options:\n\n      -V, --version       output the version number\n      -p, --port <value>  Listening port number (support Environment variable name)\n      --CORS              Enable CORS middleware\n      -o, --open [path]   Open the Index or specific page in default browser\n      -h, --help          output usage information\n\n\n### Module\n\n```JavaScript\nimport WebServer from 'koapache';\n\nconst server = new WebServer(\n    './path/of/public/folder/',\n    'DOCKER_INTERNAL_PORT',        // Get listening port from Shell environment\n    true                           // enable CORS\n);\n\nserver.workerHost().then(address  =>  console.dir( address ));\n```\nAPI document is accessed through `npm start` (offline), `npm docs` (online) or [Official Website](https://techquery.github.io/KoApache/).\n\n\n\n## Typical case\n\nhttps://www.npmjs.com/browse/depended/koapache\n",
+    "longname": "D:\\TechQuery\\KoApache\\README.md",
+    "name": "./README.md",
+    "static": true,
+    "access": "public"
+  },
+  {
+    "kind": "packageJSON",
+    "content": "{\n  \"name\": \"koapache\",\n  \"version\": \"0.3.0\",\n  \"description\": \"A Web server which is easy to use in command-line or as a forked Child process based on Koa\",\n  \"main\": \"source/WebServer.js\",\n  \"bin\": {\n    \"web-server\": \"dist/command.js\"\n  },\n  \"engines\": {\n    \"node\": \"^5.12.0\"\n  },\n  \"scripts\": {\n    \"lint\": \"eslint source/ test/\",\n    \"precommit\": \"npm run lint\",\n    \"build\": \"amd-bundle source/command dist/command -c  &&  esdoc\",\n    \"prepublishOnly\": \"npm run build\",\n    \"start\": \"node dist/command docs/ -o\",\n    \"test\": \"node --inspect-brk dist/command\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/TechQuery/KoApache.git\"\n  },\n  \"keywords\": [\n    \"Web\",\n    \"server\",\n    \"command-line\",\n    \"worker\",\n    \"koa\",\n    \"apache\"\n  ],\n  \"author\": \"shiy2008@gmail.com\",\n  \"license\": \"LGPL-3.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/TechQuery/KoApache/issues\"\n  },\n  \"homepage\": \"https://techquery.github.io/KoApache/\",\n  \"dependencies\": {\n    \"@koa/cors\": \"^2.2.1\",\n    \"babel-polyfill\": \"^6.26.0\",\n    \"babel-runtime\": \"^6.26.0\",\n    \"commander\": \"^2.15.1\",\n    \"internal-ip\": \"^3.0.1\",\n    \"koa\": \"^2.5.1\",\n    \"koa-logger\": \"^3.2.0\",\n    \"koa-static\": \"^4.0.3\",\n    \"opn\": \"^5.3.0\"\n  },\n  \"devDependencies\": {\n    \"amd-bundle\": \"^1.3.1\",\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-external-nodejs-plugin\": \"^1.0.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.19.1\",\n    \"husky\": \"^0.14.3\"\n  }\n}\n",
+    "longname": "D:\\TechQuery\\KoApache\\package.json",
+    "name": "package.json",
+    "static": true,
+    "access": "public"
+  }
+]
