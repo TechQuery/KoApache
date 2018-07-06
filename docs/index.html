@@ -30,8 +30,10 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -47,6 +49,12 @@
 <li><p><strong>Listening port</strong> supports <em>Random</em>, <em>Number</em> or <em>Environment variable name</em></p>
 </li>
 <li><p>Support <strong>CORS</strong> headers</p>
+</li>
+<li><p><strong>Reverse proxy</strong> can be configurated in <code>package.json</code></p>
+<ul>
+<li><a href="https://github.com/TechQuery/KoApache/blob/master/source/command.js#L11">Parse rule</a></li>
+<li><a href="https://github.com/TechQuery/KoApache/blob/master/package.json#L58">Example</a></li>
+</ul>
 </li>
 <li><p>Support to open <code>http://your_LAN_IP:port/</code> in your default browser on Command-line mode</p>
 </li>
@@ -69,8 +77,11 @@ Options:
 
 const server = new WebServer(
     &apos;./path/of/public/folder/&apos;,
-    &apos;DOCKER_INTERNAL_PORT&apos;,        // Get listening port from Shell environment
-    true                           // enable CORS
+    &apos;DOCKER_INTERNAL_PORT&apos;,        //  Get listening port from Shell environment
+    true,                          //  enable CORS
+    {                              //  Reverse proxy map based on String#replace()
+      &quot;^/github/(.+)&quot;:  &quot;https://api.github.com/$1&quot;
+    }
 );
 
 server.workerHost().then(address  =&gt;  console.dir( address ));</code>

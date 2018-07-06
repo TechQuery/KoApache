@@ -30,8 +30,10 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -47,14 +49,30 @@ import { join } from &apos;path&apos;;
 
 import { readFileSync } from &apos;fs&apos;;
 
-const config = JSON.parse(
-    readFileSync( join(process.argv[1], &apos;../../package.json&apos;) )
-);
+/**
+ * Get configuration of a Package from `package.json` in `process.cwd()`
+ *
+ * @param {string} name
+ *
+ * @return {?Object} (`process.env.NODE_ENV` will affect the result)
+ */
+export function configOf(name) {
 
+    const config = JSON.parse( readFileSync(&apos;./package.json&apos;) )[ name ];
+
+    if ( config )
+        return  config.env  ?  config.env[ process.env.NODE_ENV ]  :  config;
+}
+
+
+const manifest = JSON.parse(
+        readFileSync( join(process.argv[1], &apos;../../package.json&apos;) )
+    ),
+    config = configOf(&apos;koapache&apos;);
 
 Commander
-    .version( config.version )
-    .description( config.description )
+    .version( manifest.version )
+    .description( manifest.description )
     .arguments(&apos;[dir]&apos;)
     .option(
         &apos;-p, --port &lt;value&gt;&apos;,
@@ -69,7 +87,7 @@ Commander
 
 
 const server = new WebServer(
-    Commander.args[0], Commander.port, Commander.CORS, Commander.open
+    Commander.args[0], Commander.port, Commander.CORS, config.proxy, Commander.open
 );
 
 server.localHost();

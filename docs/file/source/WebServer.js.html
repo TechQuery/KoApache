@@ -30,23 +30,24 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">source/WebServer.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application
- */
-import Koa from &apos;koa&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Koa from &apos;koa&apos;;
 
 import Logger from &apos;koa-logger&apos;;
 
 import CORS from &apos;@koa/cors&apos;;
 
 import Static from &apos;koa-static&apos;;
+
+import fetch from &apos;node-fetch&apos;;
 
 import IP from &apos;internal-ip&apos;;
 
@@ -67,9 +68,10 @@ export default  class WebServer {
      * @param {string}         [staticPath=&apos;.&apos;]
      * @param {number}         [netPort=0]
      * @param {boolean}        [XDomain=false]
+     * @param {?Object}        proxyMap         - Same as the parameter of {@link WebServer.proxyOf}
      * @param {boolean|string} [openURL=false]
      */
-    constructor(staticPath, netPort, XDomain, openURL) {
+    constructor(staticPath, netPort, XDomain, proxyMap, openURL) {
         /**
          * @type {string}
          */
@@ -83,28 +85,70 @@ export default  class WebServer {
         );
 
         /**
+         * @private
+         *
          * @type {Application}
          */
-        this.core = (new Koa()).use( Logger() );
+        this.core = new Koa();
 
         /**
          * @type {boolean}
          */
         this.XDomain = XDomain;
 
-        if ( XDomain )  this.core.use( CORS() );
-
-        this.core.use( Static( this.staticPath ) );
+        /**
+         * @private
+         *
+         * @type {?Object}
+         */
+        this.proxyMap = WebServer.proxyOf( proxyMap );
 
         /**
+         * @private
+         *
          * @type {boolean|string}
          */
         this.openPath = openURL;
 
         /**
+         * @private
+         *
          * @type {ServerAddress}
          */
         this.address = null;
+
+        this.boot();
+    }
+
+    /**
+     * @private
+     *
+     * @param {Object} map - Key for RegExp source, value for replacement
+     *
+     * @return {?Object} Key for replacement, value for RegExp
+     */
+    static proxyOf(map) {
+
+        var proxyMap = { }, count = 0;
+
+        for (let pattern in map)
+            proxyMap[ map[ pattern ] ] = new RegExp( pattern ),  count++;
+
+        return  count ? proxyMap : null;
+    }
+
+    /**
+     * @private
+     */
+    boot() {
+
+        this.core.use( Logger() );
+
+        if ( this.proxyMap )  this.core.use( this.proxy.bind( this ) );
+
+        if ( this.XDomain )  this.core.use( CORS() );
+
+        this.core.use( Static( this.staticPath ) );
     }
 
     /**
@@ -128,6 +172,61 @@ export default  class WebServer {
 
         return  (typeof this.openPath !== &apos;string&apos;)  ?
             this.URL  :  resolve(this.URL, this.openPath);
+    }
+
+    /**
+     * @private
+     *
+     * @param {string}  URL
+     * @param {Context} context
+     *
+     * @return {Stream}
+     */
+    static async proxy(URL, context) {
+
+        const header = Object.assign({ },  context.header);
+
+        delete header.host;
+
+        const response = await fetch(URL, {
+            method:    context.method,
+            headers:   header,
+            compress:  false,
+            body:      /^HEAD|GET$/i.test( context.method ) ? null : context.req
+        });
+
+        context.status = response.status, context.message = response.statusText;
+
+        for (let header of response.headers.entries())
+            if (header[0] !== &apos;status&apos;)
+                context.set(
+                    header[0].replace(/^\w|-\w/g,  char =&gt; char.toUpperCase()),
+                    header[1]
+                );
+
+        return  context.body = response.body;
+    }
+
+    /**
+     * @private
+     *
+     * @param {Context}  context
+     * @param {Function} next
+     *
+     * @return {?Stream}
+     */
+    async proxy(context, next) {
+
+        const URL = context.path;
+
+        for (let path in this.proxyMap) {
+
+            let final = URL.replace(this.proxyMap[ path ],  path);
+
+            if (final !== URL)  return WebServer.proxy(final, context);
+        }
+
+        await next();
     }
 
     /**
@@ -207,6 +306,14 @@ export default  class WebServer {
  * @property {string} family  - `IPv4`
  * @property {string} address - IP address
  * @property {number} port    - Network listening port
+ */
+
+/**
+ * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application
+ */
+
+/**
+ * @external {Context} https://github.com/koajs/koa/blob/master/docs/api/context.md
  */
 </code></pre>
 

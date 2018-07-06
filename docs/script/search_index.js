@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "koapache/source/command.js~configof",
+    "function/index.html#static-function-configOf",
+    "<span>configOf</span> <span class=\"search-result-import-path\">koapache/source/command.js</span>",
+    "function"
+  ],
+  [
     "source/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "source/.external-ecmascript.js~Array",
@@ -306,6 +312,12 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "source/webserver.js~context",
+    "https://github.com/koajs/koa/blob/master/docs/api/context.md",
+    "source/WebServer.js~Context",
+    "external"
+  ],
+  [
     "source/webserver.js~serveraddress",
     "typedef/index.html#static-typedef-ServerAddress",
     "source/WebServer.js~ServerAddress",
@@ -328,6 +340,12 @@ window.esdocSearchIndex = [
     "class/source/WebServer.js~WebServer.html#instance-member-address",
     "source/WebServer.js~WebServer#address",
     "member"
+  ],
+  [
+    "source/webserver.js~webserver#boot",
+    "class/source/WebServer.js~WebServer.html#instance-method-boot",
+    "source/WebServer.js~WebServer#boot",
+    "method"
   ],
   [
     "source/webserver.js~webserver#constructor",
@@ -366,6 +384,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "source/webserver.js~webserver#proxy",
+    "class/source/WebServer.js~WebServer.html#instance-method-proxy",
+    "source/WebServer.js~WebServer#proxy",
+    "method"
+  ],
+  [
+    "source/webserver.js~webserver#proxymap",
+    "class/source/WebServer.js~WebServer.html#instance-member-proxyMap",
+    "source/WebServer.js~WebServer#proxyMap",
+    "member"
+  ],
+  [
     "source/webserver.js~webserver#staticpath",
     "class/source/WebServer.js~WebServer.html#instance-member-staticPath",
     "source/WebServer.js~WebServer#staticPath",
@@ -375,6 +405,18 @@ window.esdocSearchIndex = [
     "source/webserver.js~webserver#workerhost",
     "class/source/WebServer.js~WebServer.html#instance-method-workerHost",
     "source/WebServer.js~WebServer#workerHost",
+    "method"
+  ],
+  [
+    "source/webserver.js~webserver.proxy",
+    "class/source/WebServer.js~WebServer.html#static-method-proxy",
+    "source/WebServer.js~WebServer.proxy",
+    "method"
+  ],
+  [
+    "source/webserver.js~webserver.proxyof",
+    "class/source/WebServer.js~WebServer.html#static-method-proxyOf",
+    "source/WebServer.js~WebServer.proxyOf",
     "method"
   ],
   [

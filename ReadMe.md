@@ -18,7 +18,11 @@ A Web server which is easy to use in command-line or as a forked Child process b
 
  4. Support **CORS** headers
 
- 5. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode
+ 5. **Reverse proxy** can be configurated in `package.json`
+    - [Parse rule](https://github.com/TechQuery/KoApache/blob/master/source/command.js#L11)
+    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L58)
+
+ 6. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode
 
 
 
@@ -51,8 +55,11 @@ import WebServer from 'koapache';
 
 const server = new WebServer(
     './path/of/public/folder/',
-    'DOCKER_INTERNAL_PORT',        // Get listening port from Shell environment
-    true                           // enable CORS
+    'DOCKER_INTERNAL_PORT',        //  Get listening port from Shell environment
+    true,                          //  enable CORS
+    {                              //  Reverse proxy map based on String#replace()
+      "^/github/(.+)":  "https://api.github.com/$1"
+    }
 );
 
 server.workerHost().then(address  =>  console.dir( address ));
