@@ -16,7 +16,7 @@
   
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
+  <a href="test.html" data-ice="testLink">Test</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getResourceOf">getResourceOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
@@ -53,11 +54,11 @@ import IP from &apos;internal-ip&apos;;
 
 import open from &apos;opn&apos;;
 
-import {resolve} from &apos;url&apos;;
+import { resolve } from &apos;url&apos;;
 
 import { join } from &apos;path&apos;;
 
-import {fork} from &apos;child_process&apos;;
+import { fork } from &apos;child_process&apos;;
 
 
 /**
@@ -80,9 +81,7 @@ export default  class WebServer {
         /**
          * @type {number}
          */
-        this.netPort = (! netPort)  ?  0  :  (
-            isNaN( netPort )  ?  process.env[ netPort ]  :  +netPort
-        );
+        this.netPort = +(netPort || 0);
 
         /**
          * @private

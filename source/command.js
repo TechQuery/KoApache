@@ -8,20 +8,7 @@ import { join } from 'path';
 
 import { readFileSync } from 'fs';
 
-/**
- * Get configuration of a Package from `package.json` in `process.cwd()`
- *
- * @param {string} name
- *
- * @return {?Object} (`process.env.NODE_ENV` will affect the result)
- */
-export function configOf(name) {
-
-    const config = JSON.parse( readFileSync('./package.json') )[ name ];
-
-    if ( config )
-        return  config.env  ?  config.env[ process.env.NODE_ENV ]  :  config;
-}
+import { configOf } from './utility';
 
 
 const manifest = JSON.parse(
@@ -46,7 +33,11 @@ Commander
 
 
 const server = new WebServer(
-    Commander.args[0], Commander.port, Commander.CORS, config.proxy, Commander.open
+    Commander.args[0],
+    isNaN( Commander.port )  ?  process.env[ Commander.port ]  :  Commander.port,
+    Commander.CORS,
+    config.proxy,
+    Commander.open
 );
 
 server.localHost();

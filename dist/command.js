@@ -6,13 +6,13 @@
 (function (factory) {
 
     if ((typeof define === 'function')  &&  define.amd)
-        define('command', ["koa","koa-logger","@koa/cors","koa-static","node-fetch","internal-ip","opn","url","path","child_process","babel-polyfill","commander","fs"], factory);
+        define('command', ["fs","http","koa","koa-logger","@koa/cors","koa-static","node-fetch","internal-ip","opn","url","path","child_process","babel-polyfill","commander"], factory);
     else if (typeof module === 'object')
-        return  module.exports = factory(require('koa'),require('koa-logger'),require('@koa/cors'),require('koa-static'),require('node-fetch'),require('internal-ip'),require('opn'),require('url'),require('path'),require('child_process'),require('babel-polyfill'),require('commander'),require('fs'));
+        return  module.exports = factory(require('fs'),require('http'),require('koa'),require('koa-logger'),require('@koa/cors'),require('koa-static'),require('node-fetch'),require('internal-ip'),require('opn'),require('url'),require('path'),require('child_process'),require('babel-polyfill'),require('commander'));
     else
-        return  this['command'] = factory(this['koa'],this['koa-logger'],this['@koa/cors'],this['koa-static'],this['node-fetch'],this['internal-ip'],this['opn'],this['url'],this['path'],this['child_process'],this['babel-polyfill'],this['commander'],this['fs']);
+        return  this['command'] = factory(this['fs'],this['http'],this['koa'],this['koa-logger'],this['@koa/cors'],this['koa-static'],this['node-fetch'],this['internal-ip'],this['opn'],this['url'],this['path'],this['child_process'],this['babel-polyfill'],this['commander']);
 
-})(function (koa,koa_logger,_koa_cors,koa_static,node_fetch,internal_ip,opn,url,path,child_process,babel_polyfill,commander,fs) {
+})(function (fs,http,koa,koa_logger,_koa_cors,koa_static,node_fetch,internal_ip,opn,url,path,child_process,babel_polyfill,commander) {
 
 function merge(base, path) {
 
@@ -61,6 +61,49 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _module_ = {
+    './utility': {
+        base: '.',
+        dependency: [],
+        factory: function factory(require, exports, module) {
+            Object.defineProperty(exports, "__esModule", {
+                value: true
+            });
+            exports.configOf = configOf;
+            exports.getResourceOf = getResourceOf;
+
+            var _fs = require('fs');
+
+            var _http = require('http');
+
+            /**
+             * Get configuration of a Package from `package.json` in `process.cwd()`
+             *
+             * @param {string} name
+             *
+             * @return {?Object} (`process.env.NODE_ENV` will affect the result)
+             */
+            function configOf(name) {
+
+                var config = JSON.parse((0, _fs.readFileSync)('./package.json'))[name];
+
+                if (config) return config.env ? config.env[process.env.NODE_ENV] : config;
+            }
+
+            /**
+             * HTTP `GET` method
+             *
+             * @param {string} URL
+             *
+             * @return {Promise<IncomingMessage>}
+             */
+            function getResourceOf(URL) {
+
+                return new Promise(function (resolve, reject) {
+                    return (0, _http.get)(URL, resolve).on('error', reject);
+                });
+            }
+        }
+    },
     './WebServer': {
         base: '.',
         dependency: [],
@@ -130,7 +173,7 @@ var _module_ = {
                     /**
                      * @type {number}
                      */
-                    this.netPort = !netPort ? 0 : isNaN(netPort) ? process.env[netPort] : +netPort;
+                    this.netPort = +(netPort || 0);
 
                     /**
                      * @private
@@ -509,11 +552,6 @@ var _module_ = {
         base: '.',
         dependency: [],
         factory: function factory(require, exports, module) {
-            Object.defineProperty(exports, "__esModule", {
-                value: true
-            });
-            exports.configOf = configOf;
-
             require('babel-polyfill');
 
             var _commander = require('commander');
@@ -528,34 +566,24 @@ var _module_ = {
 
             var _fs = require('fs');
 
+            var _utility = require('./utility');
+
             function _interopRequireDefault(obj) {
                 return obj && obj.__esModule ? obj : { default: obj };
             }
 
-            /**
-             * Get configuration of a Package from `package.json` in `process.cwd()`
-             *
-             * @param {string} name
-             *
-             * @return {?Object} (`process.env.NODE_ENV` will affect the result)
-             */
-            function configOf(name) {
-
-                var config = JSON.parse((0, _fs.readFileSync)('./package.json'))[name];
-
-                if (config) return config.env ? config.env[process.env.NODE_ENV] : config;
-            }
-
             var manifest = JSON.parse((0, _fs.readFileSync)((0, _path.join)(process.argv[1], '../../package.json'))),
-                config = configOf('koapache');
+                config = (0, _utility.configOf)('koapache');
 
             _commander2.default.version(manifest.version).description(manifest.description).arguments('[dir]').option('-p, --port <value>', 'Listening port number (support Environment variable name)').option('--CORS', 'Enable CORS middleware').option('-o, --open [path]', 'Open the Index or specific page in default browser').parse(process.argv);
 
-            var server = new _WebServer2.default(_commander2.default.args[0], _commander2.default.port, _commander2.default.CORS, config.proxy, _commander2.default.open);
+            var server = new _WebServer2.default(_commander2.default.args[0], isNaN(_commander2.default.port) ? process.env[_commander2.default.port] : _commander2.default.port, _commander2.default.CORS, config.proxy, _commander2.default.open);
 
             server.localHost();
         }
     },
+    'fs': { exports: fs },
+    'http': { exports: http },
     'koa': { exports: koa },
     'koa-logger': { exports: koa_logger },
     '@koa/cors': { exports: _koa_cors },
@@ -567,8 +595,7 @@ var _module_ = {
     'path': { exports: path },
     'child_process': { exports: child_process },
     'babel-polyfill': { exports: babel_polyfill },
-    'commander': { exports: commander },
-    'fs': { exports: fs }
+    'commander': { exports: commander }
 };
 
     return require('./command');

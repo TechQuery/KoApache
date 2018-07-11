@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="">
-  <title data-ice="title">Source | koapache</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">test/index.js | koapache</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,48 +39,100 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">19/21</span></h1>
+<div class="content" data-ice="content"><h1 data-ice="title">test/index.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { configOf, getResourceOf } from &apos;../source/utility&apos;;
 
-<table class="files-summary" data-ice="files" data-use-coverage="true">
-  <thead>
-    <tr>
-      <td>File</td>
-      <td>Identifier</td>
-      <td class="coverage">Document</td>
-      <td style="display: none;">Size</td>
-      <td style="display: none;">Lines</td>
-      <td style="display: none;">Updated</td>
-    </tr>
-  </thead>
-  <tbody>
-    
-  <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/source/WebServer.js.html">source/WebServer.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">17/17</span></td>
-      <td style="display: none;" data-ice="size">6150 byte</td>
-      <td style="display: none;" data-ice="lines">274</td>
-      <td style="display: none;" data-ice="updated">2018-07-04 13:23:20 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/source/command.js.html#errorLines=14,35">source/command.js</a></span></td>
-      <td data-ice="identifier" class="identifiers">-</td>
-      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/2</span></td>
-      <td style="display: none;" data-ice="size">975 byte</td>
-      <td style="display: none;" data-ice="lines">43</td>
-      <td style="display: none;" data-ice="updated">2018-07-04 12:13:12 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/source/utility.js.html">source/utility.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-configOf">configOf</a></span>
-<span><a href="function/index.html#static-function-getResourceOf">getResourceOf</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
-      <td style="display: none;" data-ice="size">691 byte</td>
-      <td style="display: none;" data-ice="lines">34</td>
-      <td style="display: none;" data-ice="updated">2018-07-04 13:39:52 (UTC)</td>
-    </tr>
-</tbody>
-</table>
+import WebServer from &apos;../source/WebServer&apos;;
+
+
+/**
+ * @test {WebServer}
+ */
+describe(&apos;Server core&apos;,  () =&gt; {
+
+    var config, server;
+
+    /**
+     * @test {configOf}
+     * @test {WebServer.proxyOf}
+     */
+    it(&apos;Configuration&apos;,  () =&gt; {
+
+        config = configOf(&apos;koapache&apos;);
+
+        config.should.be.eql({
+            proxy:  {
+                &apos;^/github/(.+)&apos;:  &apos;https://api.github.com/$1&apos;
+            }
+        });
+
+        WebServer.proxyOf( config.proxy ).should.be.eql({
+            &apos;https://api.github.com/$1&apos;:  /^\/github\/(.+)/
+        });
+    });
+
+    /**
+     * @test {WebServer#URL}
+     * @test {WebServer#openURL}
+     */
+    it(&apos;URL getters&apos;,  () =&gt; {
+
+        server = new WebServer(&apos;docs/&apos;, 0, true, config.proxy, &apos;test/&apos;);
+
+        server.address = {
+            address:  &apos;127.0.0.1&apos;,
+            port:     80
+        };
+
+        server.URL.should.be.equal(&apos;http://127.0.0.1:80&apos;);
+
+        server.openURL.should.be.equal(&apos;http://127.0.0.1:80/test/&apos;);
+    });
+
+    /**
+     * @test {WebServer#boot}
+     * @test {WebServer#localHost}
+     */
+    it(&apos;Middlewares for Static files&apos;,  async () =&gt; {
+
+        server.openPath = null;
+
+        await  new Promise((resolve, reject) =&gt;
+            server.localHost().on(&apos;listening&apos;, resolve).on(&apos;error&apos;, reject)
+        );
+
+        const response = await getResourceOf( server.URL );
+
+        response.should.be.html();
+    });
+
+    /**
+     * @test {WebServer.proxy}
+     * @test {WebServer#proxy}
+     */
+    it(&apos;Reverse proxy&apos;,  async () =&gt; {
+
+        const response = await getResourceOf(`${server.URL}/github/users/TechQuery`);
+
+        response.should.be.json();
+    });
+
+    /**
+     * @test {WebServer#workerHost}
+     */
+    it(&apos;Host in a worker process&apos;,  async () =&gt; {
+
+        const meta = await server.workerHost();
+
+        meta.should.match({
+            family:   &apos;IPv4&apos;,
+            address:  /^(\d{1,3}\.){3}\d{1,3}$/,
+            port:     /^\d{3,5}$/
+        });
+    });
+});
+</code></pre>
+
 </div>
 
 <footer class="footer">

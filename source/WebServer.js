@@ -12,11 +12,11 @@ import IP from 'internal-ip';
 
 import open from 'opn';
 
-import {resolve} from 'url';
+import { resolve } from 'url';
 
 import { join } from 'path';
 
-import {fork} from 'child_process';
+import { fork } from 'child_process';
 
 
 /**
@@ -39,9 +39,7 @@ export default  class WebServer {
         /**
          * @type {number}
          */
-        this.netPort = (! netPort)  ?  0  :  (
-            isNaN( netPort )  ?  process.env[ netPort ]  :  +netPort
-        );
+        this.netPort = +(netPort || 0);
 
         /**
          * @private

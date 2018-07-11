@@ -6,10 +6,52 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "koapache/source/command.js~configof",
+    "koapache/source/utility.js~configof",
     "function/index.html#static-function-configOf",
-    "<span>configOf</span> <span class=\"search-result-import-path\">koapache/source/command.js</span>",
+    "<span>configOf</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
     "function"
+  ],
+  [
+    "koapache/source/utility.js~getresourceof",
+    "function/index.html#static-function-getResourceOf",
+    "<span>getResourceOf</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
+    "function"
+  ],
+  [
+    "webserver source/webserver.js~webserver,webserver",
+    "test-file/test/index.js.html#lineNumber9",
+    "Server core",
+    "test"
+  ],
+  [
+    "configof webserver.proxyof source/utility.js~configof,configof source/webserver.js~webserver.proxyof,webserver.proxyof",
+    "test-file/test/index.js.html#lineNumber17",
+    "Server core Configuration",
+    "test"
+  ],
+  [
+    "webserver#workerhost source/webserver.js~webserver#workerhost,webserver#workerhost",
+    "test-file/test/index.js.html#lineNumber81",
+    "Server core Host in a worker process",
+    "test"
+  ],
+  [
+    "webserver#boot webserver#localhost source/webserver.js~webserver#boot,webserver#boot source/webserver.js~webserver#localhost,webserver#localhost",
+    "test-file/test/index.js.html#lineNumber54",
+    "Server core Middlewares for Static files",
+    "test"
+  ],
+  [
+    "webserver.proxy webserver#proxy source/webserver.js~webserver.proxy,webserver.proxy source/webserver.js~webserver#proxy,webserver#proxy",
+    "test-file/test/index.js.html#lineNumber71",
+    "Server core Reverse proxy",
+    "test"
+  ],
+  [
+    "webserver#url webserver#openurl source/webserver.js~webserver#url,webserver#url source/webserver.js~webserver#openurl,webserver#openurl",
+    "test-file/test/index.js.html#lineNumber36",
+    "Server core URL getters",
+    "test"
   ],
   [
     "source/.external-ecmascript.js~array",
@@ -424,5 +466,17 @@ window.esdocSearchIndex = [
     "file/source/command.js.html",
     "source/command.js",
     "file"
+  ],
+  [
+    "source/utility.js",
+    "file/source/utility.js.html",
+    "source/utility.js",
+    "file"
+  ],
+  [
+    "test/index.js",
+    "test-file/test/index.js.html",
+    "test/index.js",
+    "testFile"
   ]
 ]
