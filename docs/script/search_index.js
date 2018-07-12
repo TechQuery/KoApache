@@ -1,8 +1,14 @@
 window.esdocSearchIndex = [
   [
-    "koapache~webserver",
+    "koapache/source/proxyagent.js~proxyagent",
+    "function/index.html#static-function-ProxyAgent",
+    "<span>ProxyAgent</span> <span class=\"search-result-import-path\">koapache/source/ProxyAgent.js</span>",
+    "function"
+  ],
+  [
+    "koapache/source/webserver.js~webserver",
     "class/source/WebServer.js~WebServer.html",
-    "<span>WebServer</span> <span class=\"search-result-import-path\">koapache</span>",
+    "<span>WebServer</span> <span class=\"search-result-import-path\">koapache/source/WebServer.js</span>",
     "class"
   ],
   [
@@ -12,45 +18,81 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "koapache/source/utility.js~getresourceof",
-    "function/index.html#static-function-getResourceOf",
-    "<span>getResourceOf</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
+    "koapache/source/utility.js~currentmodulepath",
+    "function/index.html#static-function-currentModulePath",
+    "<span>currentModulePath</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
+    "function"
+  ],
+  [
+    "koapache/source/utility.js~patternof",
+    "function/index.html#static-function-patternOf",
+    "<span>patternOf</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
+    "function"
+  ],
+  [
+    "koapache/source/proxyagent.js~resourcefrom",
+    "function/index.html#static-function-resourceFrom",
+    "<span>resourceFrom</span> <span class=\"search-result-import-path\">koapache/source/ProxyAgent.js</span>",
     "function"
   ],
   [
     "webserver source/webserver.js~webserver,webserver",
-    "test-file/test/index.js.html#lineNumber9",
+    "test-file/test/WebServer.js.html#lineNumber11",
     "Server core",
     "test"
   ],
   [
-    "configof webserver.proxyof source/utility.js~configof,configof source/webserver.js~webserver.proxyof,webserver.proxyof",
-    "test-file/test/index.js.html#lineNumber17",
-    "Server core Configuration",
-    "test"
-  ],
-  [
     "webserver#workerhost source/webserver.js~webserver#workerhost,webserver#workerhost",
-    "test-file/test/index.js.html#lineNumber81",
+    "test-file/test/WebServer.js.html#lineNumber62",
     "Server core Host in a worker process",
     "test"
   ],
   [
     "webserver#boot webserver#localhost source/webserver.js~webserver#boot,webserver#boot source/webserver.js~webserver#localhost,webserver#localhost",
-    "test-file/test/index.js.html#lineNumber54",
+    "test-file/test/WebServer.js.html#lineNumber36",
     "Server core Middlewares for Static files",
     "test"
   ],
   [
-    "webserver.proxy webserver#proxy source/webserver.js~webserver.proxy,webserver.proxy source/webserver.js~webserver#proxy,webserver#proxy",
-    "test-file/test/index.js.html#lineNumber71",
+    "proxyagent source/proxyagent.js~proxyagent,proxyagent",
+    "test-file/test/WebServer.js.html#lineNumber52",
     "Server core Reverse proxy",
     "test"
   ],
   [
     "webserver#url webserver#openurl source/webserver.js~webserver#url,webserver#url source/webserver.js~webserver#openurl,webserver#openurl",
-    "test-file/test/index.js.html#lineNumber36",
+    "test-file/test/WebServer.js.html#lineNumber18",
     "Server core URL getters",
+    "test"
+  ],
+  [
+    "",
+    "test-file/test/utility.js.html#lineNumber7",
+    "Utility",
+    "test"
+  ],
+  [
+    "configof source/utility.js~configof,configof",
+    "test-file/test/utility.js.html#lineNumber13",
+    "Utility Get configuration from \"package.json\"",
+    "test"
+  ],
+  [
+    "currentmodulepath source/utility.js~currentmodulepath,currentmodulepath",
+    "test-file/test/utility.js.html#lineNumber37",
+    "Utility Get path of current module",
+    "test"
+  ],
+  [
+    "resourcefrom source/proxyagent.js~resourcefrom,resourcefrom",
+    "test-file/test/utility.js.html#lineNumber45",
+    "Utility HTTP(S) request",
+    "test"
+  ],
+  [
+    "patternof source/utility.js~patternof,patternof",
+    "test-file/test/utility.js.html#lineNumber27",
+    "Utility Map String config to RegExp edition",
     "test"
   ],
   [
@@ -342,6 +384,18 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "source/proxyagent.js",
+    "file/source/ProxyAgent.js.html",
+    "source/ProxyAgent.js",
+    "file"
+  ],
+  [
+    "source/proxyagent.js~context",
+    "https://github.com/koajs/koa/blob/master/docs/api/context.md",
+    "source/ProxyAgent.js~Context",
+    "external"
+  ],
+  [
     "source/webserver.js",
     "file/source/WebServer.js.html",
     "source/WebServer.js",
@@ -351,12 +405,6 @@ window.esdocSearchIndex = [
     "source/webserver.js~application",
     "https://github.com/koajs/koa/blob/master/docs/api/index.md#application",
     "source/WebServer.js~Application",
-    "external"
-  ],
-  [
-    "source/webserver.js~context",
-    "https://github.com/koajs/koa/blob/master/docs/api/context.md",
-    "source/WebServer.js~Context",
     "external"
   ],
   [
@@ -426,12 +474,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "source/webserver.js~webserver#proxy",
-    "class/source/WebServer.js~WebServer.html#instance-method-proxy",
-    "source/WebServer.js~WebServer#proxy",
-    "method"
-  ],
-  [
     "source/webserver.js~webserver#proxymap",
     "class/source/WebServer.js~WebServer.html#instance-member-proxyMap",
     "source/WebServer.js~WebServer#proxyMap",
@@ -450,18 +492,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "source/webserver.js~webserver.proxy",
-    "class/source/WebServer.js~WebServer.html#static-method-proxy",
-    "source/WebServer.js~WebServer.proxy",
-    "method"
-  ],
-  [
-    "source/webserver.js~webserver.proxyof",
-    "class/source/WebServer.js~WebServer.html#static-method-proxyOf",
-    "source/WebServer.js~WebServer.proxyOf",
-    "method"
-  ],
-  [
     "source/command.js",
     "file/source/command.js.html",
     "source/command.js",
@@ -474,9 +504,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "test/index.js",
-    "test-file/test/index.js.html",
-    "test/index.js",
+    "test/webserver.js",
+    "test-file/test/WebServer.js.html",
+    "test/WebServer.js",
+    "testFile"
+  ],
+  [
+    "test/utility.js",
+    "test-file/test/utility.js.html",
+    "test/utility.js",
     "testFile"
   ]
 ]

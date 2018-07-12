@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl">
-  <title data-ice="title">Home | koapache</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">test/utility.js | koapache</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -42,57 +42,60 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="koapache">KoApache</h1><p>A Web server which is easy to use in command-line or as a forked Child process based on <a href="http://koajs.com/">Koa</a>.</p>
-<p><a href="https://david-dm.org/TechQuery/KoApache"><img src="https://david-dm.org/TechQuery/KoApache.svg" alt="NPM Dependency"></a></p>
-<p><a href="https://nodei.co/npm/koapache/"><img src="https://nodei.co/npm/koapache.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
-<h2 id="feature">Feature</h2><ol>
-<li><p><code>index.html</code> omissible in URL</p>
-</li>
-<li><p>Log <strong>HTTP request &amp; response</strong> in Command-line output</p>
-</li>
-<li><p><strong>Listening port</strong> supports <em>Random</em>, <em>Number</em> or <em>Environment variable name</em></p>
-</li>
-<li><p>Support <strong>CORS</strong> headers</p>
-</li>
-<li><p><strong>Reverse proxy</strong> can be configurated in <code>package.json</code></p>
-<ul>
-<li><a href="https://github.com/TechQuery/KoApache/blob/master/source/utility.js#L11">Parse rule</a></li>
-<li><a href="https://github.com/TechQuery/KoApache/blob/master/package.json#L69">Example</a></li>
-</ul>
-</li>
-<li><p>Support to open <code>http://your_LAN_IP:port/</code> in your default browser on Command-line mode</p>
-</li>
-</ol>
-<h2 id="usage">Usage</h2><h3 id="command-line">Command-line</h3><pre><code class="lang-Shell"><code class="source-code prettyprint">web-server ./path/of/public/folder/</code>
+<div class="content" data-ice="content"><h1 data-ice="title">test/utility.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { configOf, patternOf, currentModulePath } from &apos;../source/utility&apos;;
+
+import { resourceFrom } from &apos;../source/ProxyAgent&apos;;
+
+
+
+describe(&apos;Utility&apos;,  () =&gt; {
+
+    var config;
+    /**
+     * @test {configOf}
+     */
+    it(&apos;Get configuration from &quot;package.json&quot;&apos;,  () =&gt; {
+
+        config = configOf(&apos;koapache&apos;);
+
+        config.should.be.eql({
+            proxy:  {
+                &apos;^/github/(.+)&apos;:  &apos;https://api.github.com/$1&apos;
+            }
+        });
+    });
+
+    /**
+     * @test {patternOf}
+     */
+    it(
+        &apos;Map String config to RegExp edition&apos;,
+        ()  =&gt;  patternOf( config.proxy ).should.be.eql({
+            &apos;https://api.github.com/$1&apos;:  /^\/github\/(.+)/
+        })
+    );
+
+    /**
+     * @test {currentModulePath}
+     */
+    it(
+        &apos;Get path of current module&apos;,
+        ()  =&gt;  currentModulePath().should.match( /^\w:\/.+\/test\/utility\.js$/ )
+    );
+
+    /**
+     * @test {resourceFrom}
+     */
+    it(&apos;HTTP(S) request&apos;,  async () =&gt; {
+
+        (await resourceFrom(&apos;https://github.com&apos;)).should.be.html();
+
+        (await resourceFrom(&apos;https://api.github.com&apos;)).should.be.json();
+    });
+});
 </code></pre>
-<p>Help information output from <code>web-server -h</code>:</p>
-<pre><code><code class="source-code prettyprint">Usage: command [options] [dir]
 
-A Web server which is easy to use in command-line or as a forked Child process based on Koa
-
-Options:
-
-  -V, --version       output the version number
-  -p, --port &lt;value&gt;  Listening port number (support Environment variable name)
-  --CORS              Enable CORS middleware
-  -o, --open [path]   Open the Index or specific page in default browser
-  -h, --help          output usage information</code>
-</code></pre><h3 id="module">Module</h3><pre><code class="lang-JavaScript"><code class="source-code prettyprint">import WebServer from &apos;koapache&apos;;
-
-const server = new WebServer(
-    &apos;./path/of/public/folder/&apos;,
-    &apos;DOCKER_INTERNAL_PORT&apos;,        //  Get listening port from Shell environment
-    true,                          //  enable CORS
-    {                              //  Reverse proxy map based on String#replace()
-      &quot;^/github/(.+)&quot;:  &quot;https://api.github.com/$1&quot;
-    }
-);
-
-server.workerHost().then(address  =&gt;  console.dir( address ));</code>
-</code></pre>
-<p>API document is accessed through <code>npm start</code> (offline), <code>npm docs</code> (online) or <a href="https://techquery.github.io/KoApache/">Official Website</a>.</p>
-<h2 id="typical-case">Typical case</h2><p><a href="https://www.npmjs.com/browse/depended/koapache">https://www.npmjs.com/browse/depended/koapache</a></p>
-</div>
 </div>
 
 <footer class="footer">

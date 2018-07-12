@@ -579,7 +579,7 @@
     "__docId__": 50,
     "kind": "file",
     "name": "source/command.js",
-    "content": "import 'babel-polyfill';\n\nimport Commander from 'commander';\n\nimport WebServer from './WebServer';\n\nimport { join } from 'path';\n\nimport { readFileSync } from 'fs';\n\nimport { configOf } from './utility';\n\n\nconst manifest = JSON.parse(\n        readFileSync( join(process.argv[1], '../../package.json') )\n    ),\n    config = configOf('koapache');\n\nCommander\n    .version( manifest.version )\n    .description( manifest.description )\n    .arguments('[dir]')\n    .option(\n        '-p, --port <value>',\n        'Listening port number (support Environment variable name)'\n    )\n    .option('--CORS',  'Enable CORS middleware')\n    .option(\n        '-o, --open [path]',\n        'Open the Index or specific page in default browser'\n    )\n    .parse( process.argv );\n\n\nconst server = new WebServer(\n    Commander.args[0],\n    isNaN( Commander.port )  ?  process.env[ Commander.port ]  :  Commander.port,\n    Commander.CORS,\n    config.proxy,\n    Commander.open\n);\n\nserver.localHost();\n",
+    "content": "import Commander from 'commander';\n\nimport WebServer from './WebServer';\n\nimport { join } from 'path';\n\nimport { readFileSync } from 'fs';\n\nimport { configOf } from './utility';\n\n\nconst manifest = JSON.parse(\n        readFileSync( join(process.argv[1], '../../package.json') )\n    ),\n    config = configOf('koapache') || { };\n\nCommander\n    .version( manifest.version )\n    .description( manifest.description )\n    .arguments('[dir]')\n    .option(\n        '-p, --port <value>',\n        'Listening port number (support Environment variable name)'\n    )\n    .option('--CORS',  'Enable CORS middleware')\n    .option(\n        '-o, --open [path]',\n        'Open the Index or specific page in default browser'\n    )\n    .parse( process.argv );\n\n\nconst server = new WebServer(\n    Commander.args[0],\n    isNaN( Commander.port )  ?  process.env[ Commander.port ]  :  Commander.port,\n    Commander.CORS,\n    config.proxy,\n    Commander.open\n);\n\nserver.localHost();\n",
     "static": true,
     "longname": "D:/TechQuery/KoApache/source/command.js",
     "access": "public",
@@ -598,7 +598,7 @@
     "importPath": "koapache/source/command.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 12,
     "undocument": true,
     "type": {
       "types": [
@@ -619,7 +619,7 @@
     "importPath": "koapache/source/command.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 35,
+    "lineNumber": 33,
     "undocument": true,
     "type": {
       "types": [
@@ -631,8 +631,223 @@
   {
     "__docId__": 53,
     "kind": "file",
+    "name": "source/ProxyAgent.js",
+    "content": "import FormData from 'form-data';\n\nimport { createReadStream } from 'fs';\n\nimport { parse } from 'url';\n\nimport { request } from 'http';\n\nimport {request as requestS} from 'https';\n\n\n/**\n * @external {Context} https://github.com/koajs/koa/blob/master/docs/api/context.md\n */\n\n\n/**\n * @param {Context} context\n *\n * @return {FormData|Object|string}\n */\nfunction buildData(context) {\n\n    if (/^Head|Get|Delete$/.test( context.method ))  return '';\n\n    const request = context.request;\n\n    if (request.type !== 'multipart/form-data')  return request.body;\n\n    const form = new FormData();\n\n    for (let key in request.fields)  form.append(key, request.fields[ key ]);\n\n    for (let key in request.files)\n        for (let file  of  request.files[ key ])\n            form.append(key,  createReadStream( file.path ),  file.name);\n\n    return form;\n}\n\n\n/**\n * HTTP(S) request\n *\n * @param {string|URL}           URL\n * @param {string}               [method='GET']\n * @param {Object}               [header]\n * @param {string|Object|Buffer} [body]\n *\n * @return {Promise<IncomingMessage>} HTTP(S) response\n */\nexport function resourceFrom(URL,  method = 'GET',  header,  body) {\n\n    if (typeof URL === 'string')  URL = parse( URL );\n\n    const option = {\n            method,\n            headers:  Object.assign({\n                Accept:        '*/*',\n                'User-Agent':  `Node.JS ${process.version}`\n            }, header)\n        },\n        client = (URL.protocol[4] !== 's') ? request : requestS;\n\n    if ((body instanceof Object)  &&  !(body instanceof Buffer)) {\n\n        option.headers['Content-Type'] = 'application/json';\n\n        body = JSON.stringify( body );\n    }\n\n    for (let key in URL)\n        if (URL[ key ]  &&  !(URL[key] instanceof Function))\n            option[key] = URL[key];\n\n    return  new Promise((resolve, reject) =>\n        client(option, resolve).on('error', reject).end( body )\n    );\n}\n\n\n/**\n * @param {string}  URL\n * @param {Context} context\n *\n * @return {IncomingMessage}\n */\nasync function pipe(URL, context) {\n\n    const header = Object.assign({ },  context.header);\n\n    delete header.host;\n\n    const response = await resourceFrom(\n        URL,  context.method,  header,  buildData( context )\n    );\n\n    context.status = response.statusCode,\n    context.message = response.statusMessage;\n\n    for (let key in response.headers)  if (key !== 'status')\n        context.set(\n            key.replace(/^\\w|-\\w/g,  char => char.toUpperCase()),\n            response.headers[ key ]\n        );\n\n    return  context.body = response;\n}\n\n\n/**\n * @param {Object} proxyMap\n *\n * @return {AsyncFunction} Koa middleware\n */\nexport default  function (proxyMap) {\n    /**\n     * @param {Context}  context\n     * @param {Function} next\n     *\n     * @return {?IncomingMessage}\n     */\n    return  async function (context, next) {\n\n        const URL = context.path;\n\n        for (let path in proxyMap) {\n\n            let final = URL.replace(proxyMap[ path ],  path);\n\n            if (final !== URL)  return pipe(final, context);\n        }\n\n        await next();\n    };\n}\n",
+    "static": true,
+    "longname": "D:/TechQuery/KoApache/source/ProxyAgent.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 54,
+    "kind": "external",
+    "name": "Context",
+    "externalLink": "https://github.com/koajs/koa/blob/master/docs/api/context.md",
+    "memberof": "source/ProxyAgent.js",
+    "static": true,
+    "longname": "source/ProxyAgent.js~Context",
+    "access": "public",
+    "description": ""
+  },
+  {
+    "__docId__": 55,
+    "kind": "function",
+    "name": "buildData",
+    "memberof": "source/ProxyAgent.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "source/ProxyAgent.js~buildData",
+    "access": "public",
+    "export": false,
+    "importPath": "koapache/source/ProxyAgent.js",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 22,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Context"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "context",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "FormData",
+        "Object",
+        "string"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 56,
+    "kind": "function",
+    "name": "resourceFrom",
+    "memberof": "source/ProxyAgent.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "source/ProxyAgent.js~resourceFrom",
+    "access": "public",
+    "export": true,
+    "importPath": "koapache/source/ProxyAgent.js",
+    "importStyle": "{resourceFrom}",
+    "description": "HTTP(S) request",
+    "lineNumber": 52,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string",
+          "URL"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "URL",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "'GET'",
+        "defaultRaw": "'GET'",
+        "name": "method",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "header",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string",
+          "Object",
+          "Buffer"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "body",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise<IncomingMessage>"
+      ],
+      "spread": false,
+      "description": "HTTP(S) response"
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "function",
+    "name": "pipe",
+    "memberof": "source/ProxyAgent.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "source/ProxyAgent.js~pipe",
+    "access": "public",
+    "export": false,
+    "importPath": "koapache/source/ProxyAgent.js",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 88,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "URL",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Context"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "context",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "IncomingMessage"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 58,
+    "kind": "function",
+    "name": "ProxyAgent",
+    "memberof": "source/ProxyAgent.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "source/ProxyAgent.js~ProxyAgent",
+    "access": "public",
+    "export": true,
+    "importPath": "koapache/source/ProxyAgent.js",
+    "importStyle": "ProxyAgent",
+    "description": "",
+    "lineNumber": 116,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "proxyMap",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "AsyncFunction"
+      ],
+      "spread": false,
+      "description": "Koa middleware"
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "file",
     "name": "source/utility.js",
-    "content": "import { readFileSync } from 'fs';\n\nimport { get } from 'http';\n\n\n/**\n * Get configuration of a Package from `package.json` in `process.cwd()`\n *\n * @param {string} name\n *\n * @return {?Object} (`process.env.NODE_ENV` will affect the result)\n */\nexport function configOf(name) {\n\n    const config = JSON.parse( readFileSync('./package.json') )[ name ];\n\n    if ( config )\n        return  config.env  ?  config.env[ process.env.NODE_ENV ]  :  config;\n}\n\n\n/**\n * HTTP `GET` method\n *\n * @param {string} URL\n *\n * @return {Promise<IncomingMessage>}\n */\nexport function getResourceOf(URL) {\n\n    return  new Promise(\n        (resolve, reject)  =>  get(URL, resolve).on('error', reject)\n    );\n}\n",
+    "content": "import { readFileSync } from 'fs';\n\n\n/**\n * Get configuration of a Package from `package.json` in `process.cwd()`\n *\n * @param {string} name\n *\n * @return {?Object} (`process.env.NODE_ENV` will affect the result)\n */\nexport function configOf(name) {\n\n    const config = JSON.parse( readFileSync('./package.json') )[ name ];\n\n    if ( config )\n        return  config.env  ?  config.env[ process.env.NODE_ENV ]  :  config;\n}\n\n\n/**\n * @param {Object} map - Key for RegExp source, value for replacement\n *\n * @return {?Object} Key for replacement, value for RegExp\n */\nexport function patternOf(map) {\n\n    var patternMap = { }, count = 0;\n\n    for (let pattern in map)\n        patternMap[ map[ pattern ] ] = new RegExp( pattern ),  count++;\n\n    return  count ? patternMap : null;\n}\n\n\n/**\n * @return {string}\n */\nexport function currentModulePath() {\n\n    try {  throw Error();  } catch (error) {\n\n        return  error.stack.split( /[\\r\\n]+/ )[2]\n            .match( /at .+?\\((.+):\\d+:\\d+\\)/ )[1];\n    }\n}\n",
     "static": true,
     "longname": "D:/TechQuery/KoApache/source/utility.js",
     "access": "public",
@@ -640,7 +855,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 54,
+    "__docId__": 60,
     "kind": "function",
     "name": "configOf",
     "memberof": "source/utility.js",
@@ -653,7 +868,7 @@
     "importPath": "koapache/source/utility.js",
     "importStyle": "{configOf}",
     "description": "Get configuration of a Package from `package.json` in `process.cwd()`",
-    "lineNumber": 13,
+    "lineNumber": 11,
     "params": [
       {
         "nullable": null,
@@ -676,46 +891,71 @@
     }
   },
   {
-    "__docId__": 55,
+    "__docId__": 61,
     "kind": "function",
-    "name": "getResourceOf",
+    "name": "patternOf",
     "memberof": "source/utility.js",
     "generator": false,
     "async": false,
     "static": true,
-    "longname": "source/utility.js~getResourceOf",
+    "longname": "source/utility.js~patternOf",
     "access": "public",
     "export": true,
     "importPath": "koapache/source/utility.js",
-    "importStyle": "{getResourceOf}",
-    "description": "HTTP `GET` method",
-    "lineNumber": 29,
+    "importStyle": "{patternOf}",
+    "description": "",
+    "lineNumber": 25,
     "params": [
       {
         "nullable": null,
         "types": [
-          "string"
+          "Object"
         ],
         "spread": false,
         "optional": false,
-        "name": "URL",
-        "description": ""
+        "name": "map",
+        "description": "Key for RegExp source, value for replacement"
       }
     ],
     "return": {
-      "nullable": null,
+      "nullable": true,
       "types": [
-        "Promise<IncomingMessage>"
+        "Object"
       ],
       "spread": false,
-      "description": ""
+      "description": "Key for replacement, value for RegExp"
     }
   },
   {
-    "__docId__": 56,
+    "__docId__": 62,
+    "kind": "function",
+    "name": "currentModulePath",
+    "memberof": "source/utility.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "source/utility.js~currentModulePath",
+    "access": "public",
+    "export": true,
+    "importPath": "koapache/source/utility.js",
+    "importStyle": "{currentModulePath}",
+    "description": "",
+    "lineNumber": 39,
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
+  },
+  {
+    "__docId__": 63,
     "kind": "file",
     "name": "source/WebServer.js",
-    "content": "import Koa from 'koa';\n\nimport Logger from 'koa-logger';\n\nimport CORS from '@koa/cors';\n\nimport Static from 'koa-static';\n\nimport fetch from 'node-fetch';\n\nimport IP from 'internal-ip';\n\nimport open from 'opn';\n\nimport { resolve } from 'url';\n\nimport { join } from 'path';\n\nimport { fork } from 'child_process';\n\n\n/**\n * Web server\n */\nexport default  class WebServer {\n    /**\n     * @param {string}         [staticPath='.']\n     * @param {number}         [netPort=0]\n     * @param {boolean}        [XDomain=false]\n     * @param {?Object}        proxyMap         - Same as the parameter of {@link WebServer.proxyOf}\n     * @param {boolean|string} [openURL=false]\n     */\n    constructor(staticPath, netPort, XDomain, proxyMap, openURL) {\n        /**\n         * @type {string}\n         */\n        this.staticPath = staticPath || '.';\n\n        /**\n         * @type {number}\n         */\n        this.netPort = +(netPort || 0);\n\n        /**\n         * @private\n         *\n         * @type {Application}\n         */\n        this.core = new Koa();\n\n        /**\n         * @type {boolean}\n         */\n        this.XDomain = XDomain;\n\n        /**\n         * @private\n         *\n         * @type {?Object}\n         */\n        this.proxyMap = WebServer.proxyOf( proxyMap );\n\n        /**\n         * @private\n         *\n         * @type {boolean|string}\n         */\n        this.openPath = openURL;\n\n        /**\n         * @private\n         *\n         * @type {ServerAddress}\n         */\n        this.address = null;\n\n        this.boot();\n    }\n\n    /**\n     * @private\n     *\n     * @param {Object} map - Key for RegExp source, value for replacement\n     *\n     * @return {?Object} Key for replacement, value for RegExp\n     */\n    static proxyOf(map) {\n\n        var proxyMap = { }, count = 0;\n\n        for (let pattern in map)\n            proxyMap[ map[ pattern ] ] = new RegExp( pattern ),  count++;\n\n        return  count ? proxyMap : null;\n    }\n\n    /**\n     * @private\n     */\n    boot() {\n\n        this.core.use( Logger() );\n\n        if ( this.proxyMap )  this.core.use( this.proxy.bind( this ) );\n\n        if ( this.XDomain )  this.core.use( CORS() );\n\n        this.core.use( Static( this.staticPath ) );\n    }\n\n    /**\n     * Origin URI\n     *\n     * @type {string}\n     */\n    get URL() {\n\n        const address = this.address;\n\n        return  address ? `http://${address.address}:${address.port}` : '';\n    }\n\n    /**\n     * URL to open in default browser\n     *\n     * @type {string}\n     */\n    get openURL() {\n\n        return  (typeof this.openPath !== 'string')  ?\n            this.URL  :  resolve(this.URL, this.openPath);\n    }\n\n    /**\n     * @private\n     *\n     * @param {string}  URL\n     * @param {Context} context\n     *\n     * @return {Stream}\n     */\n    static async proxy(URL, context) {\n\n        const header = Object.assign({ },  context.header);\n\n        delete header.host;\n\n        const response = await fetch(URL, {\n            method:    context.method,\n            headers:   header,\n            compress:  false,\n            body:      /^HEAD|GET$/i.test( context.method ) ? null : context.req\n        });\n\n        context.status = response.status, context.message = response.statusText;\n\n        for (let header of response.headers.entries())\n            if (header[0] !== 'status')\n                context.set(\n                    header[0].replace(/^\\w|-\\w/g,  char => char.toUpperCase()),\n                    header[1]\n                );\n\n        return  context.body = response.body;\n    }\n\n    /**\n     * @private\n     *\n     * @param {Context}  context\n     * @param {Function} next\n     *\n     * @return {?Stream}\n     */\n    async proxy(context, next) {\n\n        const URL = context.path;\n\n        for (let path in this.proxyMap) {\n\n            let final = URL.replace(this.proxyMap[ path ],  path);\n\n            if (final !== URL)  return WebServer.proxy(final, context);\n        }\n\n        await next();\n    }\n\n    /**\n     * Create a server in the same Node.JS process\n     *\n     * @return {Server} HTTP server\n     */\n    localHost() {\n\n        const server = this;\n\n        return  this.core.listen(this.netPort,  async function () {\n\n            server.address = Object.assign(this.address(), {\n                family:     'IPv4',\n                address:    IP.v4.sync()\n            });\n\n            if ( process.send )\n                return  process.send({type: 'ready', data: server.address});\n\n            console.info(`Web server runs at ${server.URL}`);\n\n            if ( server.openPath )  await open( server.openURL );\n\n        }).on('error',  (error) => {\n\n            if ( process.send )\n                process.send({\n                    type:    'error',\n                    data:    error\n                });\n            else\n                console.error( error );\n        });\n    }\n\n    /**\n     * Boot a server in a forked Node.JS process\n     *\n     * @return {Promise<ServerAddress>}\n     */\n    workerHost() {\n\n        const child = fork(\n            join(process.argv[0], '../../dist/command'),\n            [this.staticPath,  '-p',  this.netPort,  this.XDomain && '--CORS'],\n            {\n                execArgv:  [ ],\n                silent:    true\n            }\n        );\n\n        return  new Promise((resolve, reject) => {\n\n            child.on('message',  event => {\n\n                switch ( event.type ) {\n                    case 'ready':    return  resolve( event.data );\n                    case 'error':    {\n\n                        let error = event.data;\n\n                        reject(Object.assign(\n                            new global[ error.name ]( error.message ),  error\n                        ));\n                    }\n                }\n            });\n        });\n    }\n}\n\n/**\n * @typedef {Object} ServerAddress\n *\n * @property {string} family  - `IPv4`\n * @property {string} address - IP address\n * @property {number} port    - Network listening port\n */\n\n/**\n * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application\n */\n\n/**\n * @external {Context} https://github.com/koajs/koa/blob/master/docs/api/context.md\n */\n",
+    "content": "import 'babel-polyfill';\n\nimport Koa from 'koa';\n\nimport { patternOf, currentModulePath } from './utility';\n\nimport Logger from 'koa-logger';\n\nimport Body from 'koa-body';\n\nimport ProxyAgent from './ProxyAgent';\n\nimport CORS from '@koa/cors';\n\nimport Static from 'koa-static';\n\nimport IP from 'internal-ip';\n\nimport open from 'opn';\n\nimport { resolve } from 'url';\n\nimport { join } from 'path';\n\nimport { fork } from 'child_process';\n\n\n/**\n * Web server\n */\nexport default  class WebServer {\n    /**\n     * @param {string}         [staticPath='.']\n     * @param {number}         [netPort=0]\n     * @param {boolean}        [XDomain=false]\n     * @param {?Object}        proxyMap         - Same as the parameter of {@link patternOf}\n     * @param {boolean|string} [openURL=false]\n     */\n    constructor(staticPath, netPort, XDomain, proxyMap, openURL) {\n        /**\n         * @type {string}\n         */\n        this.staticPath = staticPath || '.';\n\n        /**\n         * @type {number}\n         */\n        this.netPort = +(netPort || 0);\n\n        /**\n         * @private\n         *\n         * @type {Application}\n         */\n        this.core = new Koa();\n\n        /**\n         * @type {boolean}\n         */\n        this.XDomain = XDomain;\n\n        /**\n         * @private\n         *\n         * @type {?Object}\n         */\n        this.proxyMap = patternOf( proxyMap );\n\n        /**\n         * @private\n         *\n         * @type {boolean|string}\n         */\n        this.openPath = openURL;\n\n        /**\n         * @private\n         *\n         * @type {ServerAddress}\n         */\n        this.address = null;\n\n        this.boot();\n    }\n\n    /**\n     * @private\n     */\n    boot() {\n\n        this.core.use( Logger() );\n\n        if ( this.proxyMap )\n            this.core.use(\n                Body({multipart: true})\n            ).use(\n                ProxyAgent( this.proxyMap )\n            );\n\n        if ( this.XDomain )  this.core.use( CORS() );\n\n        this.core.use( Static( this.staticPath ) );\n    }\n\n    /**\n     * Origin URI\n     *\n     * @type {string}\n     */\n    get URL() {\n\n        const address = this.address;\n\n        return  address ? `http://${address.address}:${address.port}` : '';\n    }\n\n    /**\n     * URL to open in default browser\n     *\n     * @type {string}\n     */\n    get openURL() {\n\n        return  (typeof this.openPath !== 'string')  ?\n            this.URL  :  resolve(this.URL, this.openPath);\n    }\n\n    /**\n     * Create a server in the same Node.JS process\n     *\n     * @return {Server} HTTP server\n     */\n    localHost() {\n\n        const server = this;\n\n        return  this.core.listen(this.netPort,  async function () {\n\n            server.address = Object.assign(this.address(), {\n                family:     'IPv4',\n                address:    IP.v4.sync()\n            });\n\n            if ( process.send )\n                return  process.send({type: 'ready', data: server.address});\n\n            console.info(`Web server runs at ${server.URL}`);\n\n            if ( server.openPath )  await open( server.openURL );\n\n        }).on('error',  (error) => {\n\n            if ( process.send )\n                process.send({\n                    type:    'error',\n                    data:    error\n                });\n            else\n                console.error( error );\n        });\n    }\n\n    /**\n     * Boot a server in a forked Node.JS process\n     *\n     * @return {Promise<ServerAddress>}\n     */\n    workerHost() {\n\n        const child = fork(\n            join(currentModulePath(), '../../dist/koapache-cli'),\n            [this.staticPath,  '-p',  this.netPort,  this.XDomain && '--CORS'],\n            {execArgv:  [ ]}\n        );\n\n        return  new Promise((resolve, reject) => {\n\n            child.on('message',  event => {\n\n                switch ( event.type ) {\n                    case 'ready':    return  resolve( event.data );\n                    case 'error':    {\n\n                        let error = event.data;\n\n                        reject(Object.assign(\n                            new global[ error.name ]( error.message ),  error\n                        ));\n                    }\n                }\n            });\n        });\n    }\n}\n\n/**\n * @typedef {Object} ServerAddress\n *\n * @property {string} family  - `IPv4`\n * @property {string} address - IP address\n * @property {number} port    - Network listening port\n */\n\n/**\n * @external {Application} https://github.com/koajs/koa/blob/master/docs/api/index.md#application\n */\n",
     "static": true,
     "longname": "D:/TechQuery/KoApache/source/WebServer.js",
     "access": "public",
@@ -723,7 +963,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 57,
+    "__docId__": 64,
     "kind": "class",
     "name": "WebServer",
     "memberof": "source/WebServer.js",
@@ -731,14 +971,14 @@
     "longname": "source/WebServer.js~WebServer",
     "access": "public",
     "export": true,
-    "importPath": "koapache",
+    "importPath": "koapache/source/WebServer.js",
     "importStyle": "WebServer",
     "description": "Web server",
-    "lineNumber": 25,
+    "lineNumber": 31,
     "interface": false
   },
   {
-    "__docId__": 58,
+    "__docId__": 65,
     "kind": "typedef",
     "name": "ServerAddress",
     "memberof": "source/WebServer.js",
@@ -787,7 +1027,7 @@
     }
   },
   {
-    "__docId__": 59,
+    "__docId__": 66,
     "kind": "external",
     "name": "Application",
     "externalLink": "https://github.com/koajs/koa/blob/master/docs/api/index.md#application",
@@ -798,18 +1038,7 @@
     "description": ""
   },
   {
-    "__docId__": 60,
-    "kind": "external",
-    "name": "Context",
-    "externalLink": "https://github.com/koajs/koa/blob/master/docs/api/context.md",
-    "memberof": "source/WebServer.js",
-    "static": true,
-    "longname": "source/WebServer.js~Context",
-    "access": "public",
-    "description": ""
-  },
-  {
-    "__docId__": 61,
+    "__docId__": 67,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "source/WebServer.js~WebServer",
@@ -819,7 +1048,7 @@
     "longname": "source/WebServer.js~WebServer#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 33,
+    "lineNumber": 39,
     "params": [
       {
         "nullable": null,
@@ -865,7 +1094,7 @@
         "spread": false,
         "optional": false,
         "name": "proxyMap",
-        "description": "Same as the parameter of {@link WebServer.proxyOf}"
+        "description": "Same as the parameter of {@link patternOf}"
       },
       {
         "nullable": null,
@@ -883,7 +1112,7 @@
     ]
   },
   {
-    "__docId__": 62,
+    "__docId__": 68,
     "kind": "member",
     "name": "staticPath",
     "memberof": "source/WebServer.js~WebServer",
@@ -891,7 +1120,7 @@
     "longname": "source/WebServer.js~WebServer#staticPath",
     "access": "public",
     "description": "",
-    "lineNumber": 37,
+    "lineNumber": 43,
     "type": {
       "nullable": null,
       "types": [
@@ -902,7 +1131,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 69,
     "kind": "member",
     "name": "netPort",
     "memberof": "source/WebServer.js~WebServer",
@@ -910,7 +1139,7 @@
     "longname": "source/WebServer.js~WebServer#netPort",
     "access": "public",
     "description": "",
-    "lineNumber": 42,
+    "lineNumber": 48,
     "type": {
       "nullable": null,
       "types": [
@@ -921,7 +1150,7 @@
     }
   },
   {
-    "__docId__": 64,
+    "__docId__": 70,
     "kind": "member",
     "name": "core",
     "memberof": "source/WebServer.js~WebServer",
@@ -929,7 +1158,7 @@
     "longname": "source/WebServer.js~WebServer#core",
     "access": "private",
     "description": "",
-    "lineNumber": 49,
+    "lineNumber": 55,
     "type": {
       "nullable": null,
       "types": [
@@ -940,7 +1169,7 @@
     }
   },
   {
-    "__docId__": 65,
+    "__docId__": 71,
     "kind": "member",
     "name": "XDomain",
     "memberof": "source/WebServer.js~WebServer",
@@ -948,7 +1177,7 @@
     "longname": "source/WebServer.js~WebServer#XDomain",
     "access": "public",
     "description": "",
-    "lineNumber": 54,
+    "lineNumber": 60,
     "type": {
       "nullable": null,
       "types": [
@@ -959,7 +1188,7 @@
     }
   },
   {
-    "__docId__": 66,
+    "__docId__": 72,
     "kind": "member",
     "name": "proxyMap",
     "memberof": "source/WebServer.js~WebServer",
@@ -967,7 +1196,7 @@
     "longname": "source/WebServer.js~WebServer#proxyMap",
     "access": "private",
     "description": "",
-    "lineNumber": 61,
+    "lineNumber": 67,
     "type": {
       "nullable": true,
       "types": [
@@ -978,7 +1207,7 @@
     }
   },
   {
-    "__docId__": 67,
+    "__docId__": 73,
     "kind": "member",
     "name": "openPath",
     "memberof": "source/WebServer.js~WebServer",
@@ -986,7 +1215,7 @@
     "longname": "source/WebServer.js~WebServer#openPath",
     "access": "private",
     "description": "",
-    "lineNumber": 68,
+    "lineNumber": 74,
     "type": {
       "nullable": null,
       "types": [
@@ -998,7 +1227,7 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 74,
     "kind": "member",
     "name": "address",
     "memberof": "source/WebServer.js~WebServer",
@@ -1006,7 +1235,7 @@
     "longname": "source/WebServer.js~WebServer#address",
     "access": "private",
     "description": "",
-    "lineNumber": 75,
+    "lineNumber": 81,
     "type": {
       "nullable": null,
       "types": [
@@ -1017,40 +1246,7 @@
     }
   },
   {
-    "__docId__": 69,
-    "kind": "method",
-    "name": "proxyOf",
-    "memberof": "source/WebServer.js~WebServer",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "source/WebServer.js~WebServer.proxyOf",
-    "access": "private",
-    "description": "",
-    "lineNumber": 87,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "map",
-        "description": "Key for RegExp source, value for replacement"
-      }
-    ],
-    "return": {
-      "nullable": true,
-      "types": [
-        "Object"
-      ],
-      "spread": false,
-      "description": "Key for replacement, value for RegExp"
-    }
-  },
-  {
-    "__docId__": 70,
+    "__docId__": 75,
     "kind": "method",
     "name": "boot",
     "memberof": "source/WebServer.js~WebServer",
@@ -1060,12 +1256,12 @@
     "longname": "source/WebServer.js~WebServer#boot",
     "access": "private",
     "description": "",
-    "lineNumber": 100,
+    "lineNumber": 89,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 71,
+    "__docId__": 76,
     "kind": "get",
     "name": "URL",
     "memberof": "source/WebServer.js~WebServer",
@@ -1075,7 +1271,7 @@
     "longname": "source/WebServer.js~WebServer#URL",
     "access": "public",
     "description": "Origin URI",
-    "lineNumber": 116,
+    "lineNumber": 110,
     "type": {
       "nullable": null,
       "types": [
@@ -1086,7 +1282,7 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 77,
     "kind": "get",
     "name": "openURL",
     "memberof": "source/WebServer.js~WebServer",
@@ -1096,7 +1292,7 @@
     "longname": "source/WebServer.js~WebServer#openURL",
     "access": "public",
     "description": "URL to open in default browser",
-    "lineNumber": 128,
+    "lineNumber": 122,
     "type": {
       "nullable": null,
       "types": [
@@ -1107,93 +1303,7 @@
     }
   },
   {
-    "__docId__": 73,
-    "kind": "method",
-    "name": "proxy",
-    "memberof": "source/WebServer.js~WebServer",
-    "generator": false,
-    "async": true,
-    "static": true,
-    "longname": "source/WebServer.js~WebServer.proxy",
-    "access": "private",
-    "description": "",
-    "lineNumber": 142,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "URL",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "Context"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "context",
-        "description": ""
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "Stream"
-      ],
-      "spread": false,
-      "description": ""
-    }
-  },
-  {
-    "__docId__": 74,
-    "kind": "method",
-    "name": "proxy",
-    "memberof": "source/WebServer.js~WebServer",
-    "generator": false,
-    "async": true,
-    "static": false,
-    "longname": "source/WebServer.js~WebServer#proxy",
-    "access": "private",
-    "description": "",
-    "lineNumber": 175,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Context"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "context",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "Function"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "next",
-        "description": ""
-      }
-    ],
-    "return": {
-      "nullable": true,
-      "types": [
-        "Stream"
-      ],
-      "spread": false,
-      "description": ""
-    }
-  },
-  {
-    "__docId__": 75,
+    "__docId__": 78,
     "kind": "method",
     "name": "localHost",
     "memberof": "source/WebServer.js~WebServer",
@@ -1203,7 +1313,7 @@
     "longname": "source/WebServer.js~WebServer#localHost",
     "access": "public",
     "description": "Create a server in the same Node.JS process",
-    "lineNumber": 194,
+    "lineNumber": 133,
     "return": {
       "nullable": null,
       "types": [
@@ -1215,7 +1325,7 @@
     "params": []
   },
   {
-    "__docId__": 76,
+    "__docId__": 79,
     "kind": "method",
     "name": "workerHost",
     "memberof": "source/WebServer.js~WebServer",
@@ -1225,7 +1335,7 @@
     "longname": "source/WebServer.js~WebServer#workerHost",
     "access": "public",
     "description": "Boot a server in a forked Node.JS process",
-    "lineNumber": 229,
+    "lineNumber": 168,
     "return": {
       "nullable": null,
       "types": [
@@ -1238,7 +1348,7 @@
   },
   {
     "kind": "index",
-    "content": "# KoApache\n\nA Web server which is easy to use in command-line or as a forked Child process based on [Koa](http://koajs.com/).\n\n[![NPM Dependency](https://david-dm.org/TechQuery/KoApache.svg)](https://david-dm.org/TechQuery/KoApache)\n\n[![NPM](https://nodei.co/npm/koapache.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/koapache/)\n\n\n\n## Feature\n\n 1. `index.html` omissible in URL\n\n 2. Log **HTTP request & response** in Command-line output\n\n 3. **Listening port** supports *Random*, *Number* or *Environment variable name*\n\n 4. Support **CORS** headers\n\n 5. **Reverse proxy** can be configurated in `package.json`\n    - [Parse rule](https://github.com/TechQuery/KoApache/blob/master/source/command.js#L11)\n    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L58)\n\n 6. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode\n\n\n\n## Usage\n\n### Command-line\n\n```Shell\nweb-server ./path/of/public/folder/\n```\nHelp information output from `web-server -h`:\n\n    Usage: command [options] [dir]\n\n    A Web server which is easy to use in command-line or as a forked Child process based on Koa\n\n    Options:\n\n      -V, --version       output the version number\n      -p, --port <value>  Listening port number (support Environment variable name)\n      --CORS              Enable CORS middleware\n      -o, --open [path]   Open the Index or specific page in default browser\n      -h, --help          output usage information\n\n\n### Module\n\n```JavaScript\nimport WebServer from 'koapache';\n\nconst server = new WebServer(\n    './path/of/public/folder/',\n    'DOCKER_INTERNAL_PORT',        //  Get listening port from Shell environment\n    true,                          //  enable CORS\n    {                              //  Reverse proxy map based on String#replace()\n      \"^/github/(.+)\":  \"https://api.github.com/$1\"\n    }\n);\n\nserver.workerHost().then(address  =>  console.dir( address ));\n```\nAPI document is accessed through `npm start` (offline), `npm docs` (online) or [Official Website](https://techquery.github.io/KoApache/).\n\n\n\n## Typical case\n\nhttps://www.npmjs.com/browse/depended/koapache\n",
+    "content": "# KoApache\n\nA Web server which is easy to use in command-line or as a forked Child process based on [Koa](http://koajs.com/).\n\n[![NPM Dependency](https://david-dm.org/TechQuery/KoApache.svg)](https://david-dm.org/TechQuery/KoApache)\n\n[![NPM](https://nodei.co/npm/koapache.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/koapache/)\n\n\n\n## Feature\n\n 1. `index.html` omissible in URL\n\n 2. Log **HTTP request & response** in Command-line output\n\n 3. **Listening port** supports *Random*, *Number* or *Environment variable name*\n\n 4. Support **CORS** headers\n\n 5. **Reverse proxy** can be configurated in `package.json`\n    - [Parse rule](https://github.com/TechQuery/KoApache/blob/master/source/utility.js#L11)\n    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L69)\n\n 6. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode\n\n\n\n## Usage\n\n### Command-line\n\n```Shell\nweb-server ./path/of/public/folder/\n```\nHelp information output from `web-server -h`:\n\n    Usage: command [options] [dir]\n\n    A Web server which is easy to use in command-line or as a forked Child process based on Koa\n\n    Options:\n\n      -V, --version       output the version number\n      -p, --port <value>  Listening port number (support Environment variable name)\n      --CORS              Enable CORS middleware\n      -o, --open [path]   Open the Index or specific page in default browser\n      -h, --help          output usage information\n\n\n### Module\n\n```JavaScript\nimport WebServer from 'koapache';\n\nconst server = new WebServer(\n    './path/of/public/folder/',\n    'DOCKER_INTERNAL_PORT',        //  Get listening port from Shell environment\n    true,                          //  enable CORS\n    {                              //  Reverse proxy map based on String#replace()\n      \"^/github/(.+)\":  \"https://api.github.com/$1\"\n    }\n);\n\nserver.workerHost().then(address  =>  console.dir( address ));\n```\nAPI document is accessed through `npm start` (offline), `npm docs` (online) or [Official Website](https://techquery.github.io/KoApache/).\n\n\n\n## Typical case\n\nhttps://www.npmjs.com/browse/depended/koapache\n",
     "longname": "D:\\TechQuery\\KoApache\\README.md",
     "name": "./README.md",
     "static": true,
@@ -1246,119 +1356,189 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"koapache\",\n  \"version\": \"0.4.0\",\n  \"description\": \"A Web server which is easy to use in command-line or as a forked Child process based on Koa\",\n  \"main\": \"source/WebServer.js\",\n  \"bin\": {\n    \"web-server\": \"dist/command.js\"\n  },\n  \"engines\": {\n    \"node\": \"^5.12.0\"\n  },\n  \"scripts\": {\n    \"lint\": \"eslint source/ test/ --fix  &&  git add .\",\n    \"build\": \"amd-bundle source/command dist/command -c  &&  esdoc  &&  git add .\",\n    \"prepublishOnly\": \"npm run build\",\n    \"start\": \"node dist/command docs/ -o\",\n    \"check\": \"mocha -r babel-register -r should -r should-http -c --inline-diffs\",\n    \"test\": \"npm run check -- --exit\",\n    \"debug\": \"npm run check -- --inspect-brk\",\n    \"precommit\": \"npm run lint\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/TechQuery/KoApache.git\"\n  },\n  \"keywords\": [\n    \"Web\",\n    \"server\",\n    \"command-line\",\n    \"worker\",\n    \"koa\",\n    \"apache\"\n  ],\n  \"author\": \"shiy2008@gmail.com\",\n  \"license\": \"LGPL-3.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/TechQuery/KoApache/issues\"\n  },\n  \"homepage\": \"https://techquery.github.io/KoApache/\",\n  \"dependencies\": {\n    \"@koa/cors\": \"^2.2.1\",\n    \"babel-polyfill\": \"^6.26.0\",\n    \"babel-runtime\": \"^6.26.0\",\n    \"commander\": \"^2.16.0\",\n    \"internal-ip\": \"^3.0.1\",\n    \"koa\": \"^2.5.1\",\n    \"koa-logger\": \"^3.2.0\",\n    \"koa-static\": \"^4.0.3\",\n    \"node-fetch\": \"^2.1.2\",\n    \"opn\": \"^5.3.0\"\n  },\n  \"devDependencies\": {\n    \"amd-bundle\": \"^1.3.1\",\n    \"babel-plugin-transform-runtime\": \"^6.23.0\",\n    \"babel-preset-env\": \"^1.7.0\",\n    \"babel-register\": \"^6.26.0\",\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-external-nodejs-plugin\": \"^1.0.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.19.1\",\n    \"husky\": \"^0.14.3\",\n    \"mocha\": \"^5.2.0\",\n    \"should\": \"^13.2.1\",\n    \"should-http\": \"^0.1.1\"\n  },\n  \"koapache\": {\n    \"proxy\": {\n      \"^/github/(.+)\": \"https://api.github.com/$1\"\n    }\n  },\n  \"babel\": {\n    \"presets\": [\n      \"env\"\n    ],\n    \"plugins\": [\n      [\n        \"transform-runtime\",\n        {\n          \"polyfill\": false\n        }\n      ]\n    ]\n  }\n}\n",
+    "content": "{\r\n  \"name\": \"koapache\",\r\n  \"version\": \"1.0.0\",\r\n  \"description\": \"A Web server which is easy to use in command-line or as a forked Child process based on Koa\",\r\n  \"main\": \"dist/koapache.js\",\r\n  \"module\": \"source/WebServer.js\",\r\n  \"bin\": {\r\n    \"web-server\": \"dist/koapache-cli.js\"\r\n  },\r\n  \"engines\": {\r\n    \"node\": \"^5.12.0\"\r\n  },\r\n  \"scripts\": {\r\n    \"lint\": \"eslint source/ test/ --fix\",\r\n    \"bundle-command\": \"amd-bundle source/command dist/koapache-cli -c\",\r\n    \"bundle-module\": \"amd-bundle source/WebServer dist/koapache\",\r\n    \"prepublishOnly\": \"npm run lint  &&  npm run bundle-command  &&  npm run bundle-module\",\r\n    \"build\": \"npm run prepublishOnly  &&  esdoc  &&  git add .\",\r\n    \"start\": \"node dist/command docs/ -o\",\r\n    \"test\": \"mocha --exit\",\r\n    \"debug\": \"mocha --inspect-brk\",\r\n    \"precommit\": \"npm test  &&  npm run build\"\r\n  },\r\n  \"repository\": {\r\n    \"type\": \"git\",\r\n    \"url\": \"git+https://github.com/TechQuery/KoApache.git\"\r\n  },\r\n  \"keywords\": [\r\n    \"Web\",\r\n    \"server\",\r\n    \"command-line\",\r\n    \"worker\",\r\n    \"koa\",\r\n    \"apache\"\r\n  ],\r\n  \"author\": \"shiy2008@gmail.com\",\r\n  \"license\": \"LGPL-3.0\",\r\n  \"bugs\": {\r\n    \"url\": \"https://github.com/TechQuery/KoApache/issues\"\r\n  },\r\n  \"homepage\": \"https://techquery.github.io/KoApache/\",\r\n  \"dependencies\": {\r\n    \"@koa/cors\": \"^2.2.1\",\r\n    \"babel-polyfill\": \"^6.26.0\",\r\n    \"babel-runtime\": \"^6.26.0\",\r\n    \"commander\": \"^2.16.0\",\r\n    \"form-data\": \"^2.3.2\",\r\n    \"internal-ip\": \"^3.0.1\",\r\n    \"koa\": \"^2.5.1\",\r\n    \"koa-body\": \"^4.0.4\",\r\n    \"koa-logger\": \"^3.2.0\",\r\n    \"koa-static\": \"^4.0.3\",\r\n    \"opn\": \"^5.3.0\"\r\n  },\r\n  \"devDependencies\": {\r\n    \"amd-bundle\": \"^1.3.2\",\r\n    \"babel-plugin-transform-runtime\": \"^6.23.0\",\r\n    \"babel-preset-env\": \"^1.7.0\",\r\n    \"babel-register\": \"^6.26.0\",\r\n    \"esdoc\": \"^1.1.0\",\r\n    \"esdoc-external-nodejs-plugin\": \"^1.0.0\",\r\n    \"esdoc-standard-plugin\": \"^1.0.0\",\r\n    \"eslint\": \"^4.19.1\",\r\n    \"husky\": \"^0.14.3\",\r\n    \"mocha\": \"^5.2.0\",\r\n    \"should\": \"^13.2.1\",\r\n    \"should-http\": \"^0.1.1\"\r\n  },\r\n  \"koapache\": {\r\n    \"proxy\": {\r\n      \"^/github/(.+)\": \"https://api.github.com/$1\"\r\n    }\r\n  },\r\n  \"babel\": {\r\n    \"presets\": [\r\n      \"env\"\r\n    ],\r\n    \"plugins\": [\r\n      [\r\n        \"transform-runtime\",\r\n        {\r\n          \"polyfill\": false\r\n        }\r\n      ]\r\n    ]\r\n  }\r\n}\r\n",
     "longname": "D:\\TechQuery\\KoApache\\package.json",
     "name": "package.json",
     "static": true,
     "access": "public"
   },
   {
-    "__docId__": 77,
+    "__docId__": 80,
     "kind": "testFile",
-    "name": "test/index.js",
-    "content": "import { configOf, getResourceOf } from '../source/utility';\n\nimport WebServer from '../source/WebServer';\n\n\n/**\n * @test {WebServer}\n */\ndescribe('Server core',  () => {\n\n    var config, server;\n\n    /**\n     * @test {configOf}\n     * @test {WebServer.proxyOf}\n     */\n    it('Configuration',  () => {\n\n        config = configOf('koapache');\n\n        config.should.be.eql({\n            proxy:  {\n                '^/github/(.+)':  'https://api.github.com/$1'\n            }\n        });\n\n        WebServer.proxyOf( config.proxy ).should.be.eql({\n            'https://api.github.com/$1':  /^\\/github\\/(.+)/\n        });\n    });\n\n    /**\n     * @test {WebServer#URL}\n     * @test {WebServer#openURL}\n     */\n    it('URL getters',  () => {\n\n        server = new WebServer('docs/', 0, true, config.proxy, 'test/');\n\n        server.address = {\n            address:  '127.0.0.1',\n            port:     80\n        };\n\n        server.URL.should.be.equal('http://127.0.0.1:80');\n\n        server.openURL.should.be.equal('http://127.0.0.1:80/test/');\n    });\n\n    /**\n     * @test {WebServer#boot}\n     * @test {WebServer#localHost}\n     */\n    it('Middlewares for Static files',  async () => {\n\n        server.openPath = null;\n\n        await  new Promise((resolve, reject) =>\n            server.localHost().on('listening', resolve).on('error', reject)\n        );\n\n        const response = await getResourceOf( server.URL );\n\n        response.should.be.html();\n    });\n\n    /**\n     * @test {WebServer.proxy}\n     * @test {WebServer#proxy}\n     */\n    it('Reverse proxy',  async () => {\n\n        const response = await getResourceOf(`${server.URL}/github/users/TechQuery`);\n\n        response.should.be.json();\n    });\n\n    /**\n     * @test {WebServer#workerHost}\n     */\n    it('Host in a worker process',  async () => {\n\n        const meta = await server.workerHost();\n\n        meta.should.match({\n            family:   'IPv4',\n            address:  /^(\\d{1,3}\\.){3}\\d{1,3}$/,\n            port:     /^\\d{3,5}$/\n        });\n    });\n});\n",
+    "name": "test/utility.js",
+    "content": "import { configOf, patternOf, currentModulePath } from '../source/utility';\n\nimport { resourceFrom } from '../source/ProxyAgent';\n\n\n\ndescribe('Utility',  () => {\n\n    var config;\n    /**\n     * @test {configOf}\n     */\n    it('Get configuration from \"package.json\"',  () => {\n\n        config = configOf('koapache');\n\n        config.should.be.eql({\n            proxy:  {\n                '^/github/(.+)':  'https://api.github.com/$1'\n            }\n        });\n    });\n\n    /**\n     * @test {patternOf}\n     */\n    it(\n        'Map String config to RegExp edition',\n        ()  =>  patternOf( config.proxy ).should.be.eql({\n            'https://api.github.com/$1':  /^\\/github\\/(.+)/\n        })\n    );\n\n    /**\n     * @test {currentModulePath}\n     */\n    it(\n        'Get path of current module',\n        ()  =>  currentModulePath().should.match( /^\\w:\\/.+\\/test\\/utility\\.js$/ )\n    );\n\n    /**\n     * @test {resourceFrom}\n     */\n    it('HTTP(S) request',  async () => {\n\n        (await resourceFrom('https://github.com')).should.be.html();\n\n        (await resourceFrom('https://api.github.com')).should.be.json();\n    });\n});\n",
     "static": true,
-    "longname": "D:/TechQuery/KoApache/test/index.js",
+    "longname": "D:/TechQuery/KoApache/test/utility.js",
     "access": null,
     "description": null,
     "lineNumber": 1
   },
   {
-    "__docId__": 78,
+    "__docId__": 81,
     "kind": "test",
     "name": "describe0",
     "testId": 0,
-    "memberof": "test/index.js",
+    "memberof": "test/utility.js",
     "testDepth": 0,
     "static": true,
-    "longname": "test/index.js~describe0",
+    "longname": "test/utility.js~describe0",
+    "access": null,
+    "description": "Utility",
+    "lineNumber": 7
+  },
+  {
+    "__docId__": 82,
+    "kind": "test",
+    "name": "it1",
+    "testId": 1,
+    "memberof": "test/utility.js~describe0",
+    "testDepth": 1,
+    "static": true,
+    "longname": "test/utility.js~describe0.it1",
+    "access": null,
+    "description": "Get configuration from \"package.json\"",
+    "lineNumber": 13,
+    "testTargets": [
+      "configOf"
+    ]
+  },
+  {
+    "__docId__": 83,
+    "kind": "test",
+    "name": "it2",
+    "testId": 2,
+    "memberof": "test/utility.js~describe0",
+    "testDepth": 1,
+    "static": true,
+    "longname": "test/utility.js~describe0.it2",
+    "access": null,
+    "description": "Map String config to RegExp edition",
+    "lineNumber": 27,
+    "testTargets": [
+      "patternOf"
+    ]
+  },
+  {
+    "__docId__": 84,
+    "kind": "test",
+    "name": "it3",
+    "testId": 3,
+    "memberof": "test/utility.js~describe0",
+    "testDepth": 1,
+    "static": true,
+    "longname": "test/utility.js~describe0.it3",
+    "access": null,
+    "description": "Get path of current module",
+    "lineNumber": 37,
+    "testTargets": [
+      "currentModulePath"
+    ]
+  },
+  {
+    "__docId__": 85,
+    "kind": "test",
+    "name": "it4",
+    "testId": 4,
+    "memberof": "test/utility.js~describe0",
+    "testDepth": 1,
+    "static": true,
+    "longname": "test/utility.js~describe0.it4",
+    "access": null,
+    "description": "HTTP(S) request",
+    "lineNumber": 45,
+    "testTargets": [
+      "resourceFrom"
+    ]
+  },
+  {
+    "__docId__": 86,
+    "kind": "testFile",
+    "name": "test/WebServer.js",
+    "content": "import { configOf } from '../source/utility';\n\nimport { resourceFrom } from '../source/ProxyAgent';\n\nimport WebServer from '../source/WebServer';\n\n\n/**\n * @test {WebServer}\n */\ndescribe('Server core',  () => {\n\n    var config = configOf('koapache'), server;\n    /**\n     * @test {WebServer#URL}\n     * @test {WebServer#openURL}\n     */\n    it('URL getters',  () => {\n\n        server = new WebServer('docs/', 0, true, config.proxy, 'test/');\n\n        server.address = {\n            address:  '127.0.0.1',\n            port:     80\n        };\n\n        server.URL.should.be.equal('http://127.0.0.1:80');\n\n        server.openURL.should.be.equal('http://127.0.0.1:80/test/');\n    });\n\n    /**\n     * @test {WebServer#boot}\n     * @test {WebServer#localHost}\n     */\n    it('Middlewares for Static files',  async () => {\n\n        server.openPath = null;\n\n        await  new Promise((resolve, reject) =>\n            server.localHost().on('listening', resolve).on('error', reject)\n        );\n\n        const response = await resourceFrom( server.URL );\n\n        response.should.be.html();\n    });\n\n    /**\n     * @test {ProxyAgent}\n     */\n    it('Reverse proxy',  async () => {\n\n        const response = await resourceFrom(`${server.URL}/github/users/TechQuery`);\n\n        response.should.be.json();\n    });\n\n    /**\n     * @test {WebServer#workerHost}\n     */\n    it('Host in a worker process',  async () => {\n\n        const meta = await server.workerHost();\n\n        meta.should.match({\n            family:   'IPv4',\n            address:  /^(\\d{1,3}\\.){3}\\d{1,3}$/\n        });\n\n        meta.port.should.be.within(1024, 65535);\n    });\n});\n",
+    "static": true,
+    "longname": "D:/TechQuery/KoApache/test/WebServer.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 87,
+    "kind": "test",
+    "name": "describe5",
+    "testId": 5,
+    "memberof": "test/WebServer.js",
+    "testDepth": 0,
+    "static": true,
+    "longname": "test/WebServer.js~describe5",
     "access": null,
     "description": "Server core",
-    "lineNumber": 9,
+    "lineNumber": 11,
     "testTargets": [
       "WebServer"
     ]
   },
   {
-    "__docId__": 79,
+    "__docId__": 88,
     "kind": "test",
-    "name": "it1",
-    "testId": 1,
-    "memberof": "test/index.js~describe0",
+    "name": "it6",
+    "testId": 6,
+    "memberof": "test/WebServer.js~describe5",
     "testDepth": 1,
     "static": true,
-    "longname": "test/index.js~describe0.it1",
-    "access": null,
-    "description": "Configuration",
-    "lineNumber": 17,
-    "testTargets": [
-      "configOf",
-      "WebServer.proxyOf"
-    ]
-  },
-  {
-    "__docId__": 80,
-    "kind": "test",
-    "name": "it2",
-    "testId": 2,
-    "memberof": "test/index.js~describe0",
-    "testDepth": 1,
-    "static": true,
-    "longname": "test/index.js~describe0.it2",
+    "longname": "test/WebServer.js~describe5.it6",
     "access": null,
     "description": "URL getters",
-    "lineNumber": 36,
+    "lineNumber": 18,
     "testTargets": [
       "WebServer#URL",
       "WebServer#openURL"
     ]
   },
   {
-    "__docId__": 81,
+    "__docId__": 89,
     "kind": "test",
-    "name": "it3",
-    "testId": 3,
-    "memberof": "test/index.js~describe0",
+    "name": "it7",
+    "testId": 7,
+    "memberof": "test/WebServer.js~describe5",
     "testDepth": 1,
     "static": true,
-    "longname": "test/index.js~describe0.it3",
+    "longname": "test/WebServer.js~describe5.it7",
     "access": null,
     "description": "Middlewares for Static files",
-    "lineNumber": 54,
+    "lineNumber": 36,
     "testTargets": [
       "WebServer#boot",
       "WebServer#localHost"
     ]
   },
   {
-    "__docId__": 82,
+    "__docId__": 90,
     "kind": "test",
-    "name": "it4",
-    "testId": 4,
-    "memberof": "test/index.js~describe0",
+    "name": "it8",
+    "testId": 8,
+    "memberof": "test/WebServer.js~describe5",
     "testDepth": 1,
     "static": true,
-    "longname": "test/index.js~describe0.it4",
+    "longname": "test/WebServer.js~describe5.it8",
     "access": null,
     "description": "Reverse proxy",
-    "lineNumber": 71,
+    "lineNumber": 52,
     "testTargets": [
-      "WebServer.proxy",
-      "WebServer#proxy"
+      "ProxyAgent"
     ]
   },
   {
-    "__docId__": 83,
+    "__docId__": 91,
     "kind": "test",
-    "name": "it5",
-    "testId": 5,
-    "memberof": "test/index.js~describe0",
+    "name": "it9",
+    "testId": 9,
+    "memberof": "test/WebServer.js~describe5",
     "testDepth": 1,
     "static": true,
-    "longname": "test/index.js~describe0.it5",
+    "longname": "test/WebServer.js~describe5.it9",
     "access": null,
     "description": "Host in a worker process",
-    "lineNumber": 81,
+    "lineNumber": 62,
     "testTargets": [
       "WebServer#workerHost"
     ]

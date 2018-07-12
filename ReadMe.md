@@ -19,8 +19,8 @@ A Web server which is easy to use in command-line or as a forked Child process b
  4. Support **CORS** headers
 
  5. **Reverse proxy** can be configurated in `package.json`
-    - [Parse rule](https://github.com/TechQuery/KoApache/blob/master/source/command.js#L11)
-    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L58)
+    - [Parse rule](https://github.com/TechQuery/KoApache/blob/master/source/utility.js#L11)
+    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L69)
 
  6. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode
 

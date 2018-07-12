@@ -1,5 +1,3 @@
-import 'babel-polyfill';
-
 import Commander from 'commander';
 
 import WebServer from './WebServer';
@@ -14,7 +12,7 @@ import { configOf } from './utility';
 const manifest = JSON.parse(
         readFileSync( join(process.argv[1], '../../package.json') )
     ),
-    config = configOf('koapache');
+    config = configOf('koapache') || { };
 
 Commander
     .version( manifest.version )

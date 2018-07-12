@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl">
-  <title data-ice="title">Home | koapache</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">source/ProxyAgent.js | koapache</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -42,57 +42,145 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="koapache">KoApache</h1><p>A Web server which is easy to use in command-line or as a forked Child process based on <a href="http://koajs.com/">Koa</a>.</p>
-<p><a href="https://david-dm.org/TechQuery/KoApache"><img src="https://david-dm.org/TechQuery/KoApache.svg" alt="NPM Dependency"></a></p>
-<p><a href="https://nodei.co/npm/koapache/"><img src="https://nodei.co/npm/koapache.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
-<h2 id="feature">Feature</h2><ol>
-<li><p><code>index.html</code> omissible in URL</p>
-</li>
-<li><p>Log <strong>HTTP request &amp; response</strong> in Command-line output</p>
-</li>
-<li><p><strong>Listening port</strong> supports <em>Random</em>, <em>Number</em> or <em>Environment variable name</em></p>
-</li>
-<li><p>Support <strong>CORS</strong> headers</p>
-</li>
-<li><p><strong>Reverse proxy</strong> can be configurated in <code>package.json</code></p>
-<ul>
-<li><a href="https://github.com/TechQuery/KoApache/blob/master/source/utility.js#L11">Parse rule</a></li>
-<li><a href="https://github.com/TechQuery/KoApache/blob/master/package.json#L69">Example</a></li>
-</ul>
-</li>
-<li><p>Support to open <code>http://your_LAN_IP:port/</code> in your default browser on Command-line mode</p>
-</li>
-</ol>
-<h2 id="usage">Usage</h2><h3 id="command-line">Command-line</h3><pre><code class="lang-Shell"><code class="source-code prettyprint">web-server ./path/of/public/folder/</code>
-</code></pre>
-<p>Help information output from <code>web-server -h</code>:</p>
-<pre><code><code class="source-code prettyprint">Usage: command [options] [dir]
+<div class="content" data-ice="content"><h1 data-ice="title">source/ProxyAgent.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import FormData from &apos;form-data&apos;;
 
-A Web server which is easy to use in command-line or as a forked Child process based on Koa
+import { createReadStream } from &apos;fs&apos;;
 
-Options:
+import { parse } from &apos;url&apos;;
 
-  -V, --version       output the version number
-  -p, --port &lt;value&gt;  Listening port number (support Environment variable name)
-  --CORS              Enable CORS middleware
-  -o, --open [path]   Open the Index or specific page in default browser
-  -h, --help          output usage information</code>
-</code></pre><h3 id="module">Module</h3><pre><code class="lang-JavaScript"><code class="source-code prettyprint">import WebServer from &apos;koapache&apos;;
+import { request } from &apos;http&apos;;
 
-const server = new WebServer(
-    &apos;./path/of/public/folder/&apos;,
-    &apos;DOCKER_INTERNAL_PORT&apos;,        //  Get listening port from Shell environment
-    true,                          //  enable CORS
-    {                              //  Reverse proxy map based on String#replace()
-      &quot;^/github/(.+)&quot;:  &quot;https://api.github.com/$1&quot;
+import {request as requestS} from &apos;https&apos;;
+
+
+/**
+ * @external {Context} https://github.com/koajs/koa/blob/master/docs/api/context.md
+ */
+
+
+/**
+ * @param {Context} context
+ *
+ * @return {FormData|Object|string}
+ */
+function buildData(context) {
+
+    if (/^Head|Get|Delete$/.test( context.method ))  return &apos;&apos;;
+
+    const request = context.request;
+
+    if (request.type !== &apos;multipart/form-data&apos;)  return request.body;
+
+    const form = new FormData();
+
+    for (let key in request.fields)  form.append(key, request.fields[ key ]);
+
+    for (let key in request.files)
+        for (let file  of  request.files[ key ])
+            form.append(key,  createReadStream( file.path ),  file.name);
+
+    return form;
+}
+
+
+/**
+ * HTTP(S) request
+ *
+ * @param {string|URL}           URL
+ * @param {string}               [method=&apos;GET&apos;]
+ * @param {Object}               [header]
+ * @param {string|Object|Buffer} [body]
+ *
+ * @return {Promise&lt;IncomingMessage&gt;} HTTP(S) response
+ */
+export function resourceFrom(URL,  method = &apos;GET&apos;,  header,  body) {
+
+    if (typeof URL === &apos;string&apos;)  URL = parse( URL );
+
+    const option = {
+            method,
+            headers:  Object.assign({
+                Accept:        &apos;*/*&apos;,
+                &apos;User-Agent&apos;:  `Node.JS ${process.version}`
+            }, header)
+        },
+        client = (URL.protocol[4] !== &apos;s&apos;) ? request : requestS;
+
+    if ((body instanceof Object)  &amp;&amp;  !(body instanceof Buffer)) {
+
+        option.headers[&apos;Content-Type&apos;] = &apos;application/json&apos;;
+
+        body = JSON.stringify( body );
     }
-);
 
-server.workerHost().then(address  =&gt;  console.dir( address ));</code>
+    for (let key in URL)
+        if (URL[ key ]  &amp;&amp;  !(URL[key] instanceof Function))
+            option[key] = URL[key];
+
+    return  new Promise((resolve, reject) =&gt;
+        client(option, resolve).on(&apos;error&apos;, reject).end( body )
+    );
+}
+
+
+/**
+ * @param {string}  URL
+ * @param {Context} context
+ *
+ * @return {IncomingMessage}
+ */
+async function pipe(URL, context) {
+
+    const header = Object.assign({ },  context.header);
+
+    delete header.host;
+
+    const response = await resourceFrom(
+        URL,  context.method,  header,  buildData( context )
+    );
+
+    context.status = response.statusCode,
+    context.message = response.statusMessage;
+
+    for (let key in response.headers)  if (key !== &apos;status&apos;)
+        context.set(
+            key.replace(/^\w|-\w/g,  char =&gt; char.toUpperCase()),
+            response.headers[ key ]
+        );
+
+    return  context.body = response;
+}
+
+
+/**
+ * @param {Object} proxyMap
+ *
+ * @return {AsyncFunction} Koa middleware
+ */
+export default  function (proxyMap) {
+    /**
+     * @param {Context}  context
+     * @param {Function} next
+     *
+     * @return {?IncomingMessage}
+     */
+    return  async function (context, next) {
+
+        const URL = context.path;
+
+        for (let path in proxyMap) {
+
+            let final = URL.replace(proxyMap[ path ],  path);
+
+            if (final !== URL)  return pipe(final, context);
+        }
+
+        await next();
+    };
+}
 </code></pre>
-<p>API document is accessed through <code>npm start</code> (offline), <code>npm docs</code> (online) or <a href="https://techquery.github.io/KoApache/">Official Website</a>.</p>
-<h2 id="typical-case">Typical case</h2><p><a href="https://www.npmjs.com/browse/depended/koapache">https://www.npmjs.com/browse/depended/koapache</a></p>
-</div>
+
 </div>
 
 <footer class="footer">

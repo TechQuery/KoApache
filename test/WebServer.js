@@ -1,4 +1,6 @@
-import { configOf, getResourceOf } from '../source/utility';
+import { configOf } from '../source/utility';
+
+import { resourceFrom } from '../source/ProxyAgent';
 
 import WebServer from '../source/WebServer';
 
@@ -8,27 +10,7 @@ import WebServer from '../source/WebServer';
  */
 describe('Server core',  () => {
 
-    var config, server;
-
-    /**
-     * @test {configOf}
-     * @test {WebServer.proxyOf}
-     */
-    it('Configuration',  () => {
-
-        config = configOf('koapache');
-
-        config.should.be.eql({
-            proxy:  {
-                '^/github/(.+)':  'https://api.github.com/$1'
-            }
-        });
-
-        WebServer.proxyOf( config.proxy ).should.be.eql({
-            'https://api.github.com/$1':  /^\/github\/(.+)/
-        });
-    });
-
+    var config = configOf('koapache'), server;
     /**
      * @test {WebServer#URL}
      * @test {WebServer#openURL}
@@ -59,18 +41,17 @@ describe('Server core',  () => {
             server.localHost().on('listening', resolve).on('error', reject)
         );
 
-        const response = await getResourceOf( server.URL );
+        const response = await resourceFrom( server.URL );
 
         response.should.be.html();
     });
 
     /**
-     * @test {WebServer.proxy}
-     * @test {WebServer#proxy}
+     * @test {ProxyAgent}
      */
     it('Reverse proxy',  async () => {
 
-        const response = await getResourceOf(`${server.URL}/github/users/TechQuery`);
+        const response = await resourceFrom(`${server.URL}/github/users/TechQuery`);
 
         response.should.be.json();
     });
@@ -84,8 +65,9 @@ describe('Server core',  () => {
 
         meta.should.match({
             family:   'IPv4',
-            address:  /^(\d{1,3}\.){3}\d{1,3}$/,
-            port:     /^\d{3,5}$/
+            address:  /^(\d{1,3}\.){3}\d{1,3}$/
         });
+
+        meta.port.should.be.within(1024, 65535);
     });
 });

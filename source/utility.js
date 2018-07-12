@@ -1,7 +1,5 @@
 import { readFileSync } from 'fs';
 
-import { get } from 'http';
-
 
 /**
  * Get configuration of a Package from `package.json` in `process.cwd()`
@@ -20,15 +18,29 @@ export function configOf(name) {
 
 
 /**
- * HTTP `GET` method
+ * @param {Object} map - Key for RegExp source, value for replacement
  *
- * @param {string} URL
- *
- * @return {Promise<IncomingMessage>}
+ * @return {?Object} Key for replacement, value for RegExp
  */
-export function getResourceOf(URL) {
+export function patternOf(map) {
 
-    return  new Promise(
-        (resolve, reject)  =>  get(URL, resolve).on('error', reject)
-    );
+    var patternMap = { }, count = 0;
+
+    for (let pattern in map)
+        patternMap[ map[ pattern ] ] = new RegExp( pattern ),  count++;
+
+    return  count ? patternMap : null;
+}
+
+
+/**
+ * @return {string}
+ */
+export function currentModulePath() {
+
+    try {  throw Error();  } catch (error) {
+
+        return  error.stack.split( /[\r\n]+/ )[2]
+            .match( /at .+?\((.+):\d+:\d+\)/ )[1];
+    }
 }

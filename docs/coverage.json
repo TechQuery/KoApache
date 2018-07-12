@@ -1,24 +1,29 @@
 {
-  "coverage": "90.47%",
-  "expectCount": 21,
-  "actualCount": 19,
+  "coverage": "91.3%",
+  "expectCount": 23,
+  "actualCount": 21,
   "files": {
     "source/command.js": {
       "expectCount": 2,
       "actualCount": 0,
       "undocumentLines": [
-        14,
-        35
+        12,
+        33
       ]
     },
+    "source/ProxyAgent.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
     "source/utility.js": {
-      "expectCount": 2,
-      "actualCount": 2,
+      "expectCount": 3,
+      "actualCount": 3,
       "undocumentLines": []
     },
     "source/WebServer.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+      "expectCount": 14,
+      "actualCount": 14,
       "undocumentLines": []
     }
   }

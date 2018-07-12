@@ -30,11 +30,14 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ProxyAgent">ProxyAgent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resourceFrom">resourceFrom</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getResourceOf">getResourceOf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-currentModulePath">currentModulePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-patternOf">patternOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -49,41 +52,63 @@
   </thead>
 
   <tbody data-ice="tests"><tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="0">
-  <td data-ice="testDescription" style="padding-left: 10px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/test/index.js.html#lineNumber9"><p>Server core</p>
+  <td data-ice="testDescription" style="padding-left: 10px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/test/utility.js.html#lineNumber7"><p>Utility</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/utility.js.html#lineNumber13"><p>Get configuration from &quot;package.json&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="function/index.html#static-function-configOf">configOf</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/utility.js.html#lineNumber27"><p>Map String config to RegExp edition</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="function/index.html#static-function-patternOf">patternOf</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/utility.js.html#lineNumber37"><p>Get path of current module</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="function/index.html#static-function-currentModulePath">currentModulePath</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/utility.js.html#lineNumber45"><p>HTTP(S) request</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="function/index.html#static-function-resourceFrom">resourceFrom</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="0">
+  <td data-ice="testDescription" style="padding-left: 10px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/test/WebServer.js.html#lineNumber11"><p>Server core</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></td>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/index.js.html#lineNumber17"><p>Configuration</p>
-</a></span></td>
-  <td data-ice="testTarget" class="test-target"><span><a href="function/index.html#static-function-configOf">configOf</a></span>
-<span><a href="class/source/WebServer.js~WebServer.html#static-method-proxyOf">WebServer.proxyOf</a></span></td>
-</tr>
-
-<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/index.js.html#lineNumber36"><p>URL getters</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/WebServer.js.html#lineNumber18"><p>URL getters</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target"><span><a href="class/source/WebServer.js~WebServer.html#instance-get-URL">WebServer#URL</a></span>
 <span><a href="class/source/WebServer.js~WebServer.html#instance-get-openURL">WebServer#openURL</a></span></td>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/index.js.html#lineNumber54"><p>Middlewares for Static files</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/WebServer.js.html#lineNumber36"><p>Middlewares for Static files</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target"><span><a href="class/source/WebServer.js~WebServer.html#instance-method-boot">WebServer#boot</a></span>
 <span><a href="class/source/WebServer.js~WebServer.html#instance-method-localHost">WebServer#localHost</a></span></td>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/index.js.html#lineNumber71"><p>Reverse proxy</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/WebServer.js.html#lineNumber52"><p>Reverse proxy</p>
 </a></span></td>
-  <td data-ice="testTarget" class="test-target"><span><a href="class/source/WebServer.js~WebServer.html#static-method-proxy">WebServer.proxy</a></span>
-<span><a href="class/source/WebServer.js~WebServer.html#instance-method-proxy">WebServer#proxy</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="function/index.html#static-function-ProxyAgent">ProxyAgent</a></span></td>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/index.js.html#lineNumber81"><p>Host in a worker process</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/test/WebServer.js.html#lineNumber62"><p>Host in a worker process</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target"><span><a href="class/source/WebServer.js~WebServer.html#instance-method-workerHost">WebServer#workerHost</a></span></td>
 </tr>

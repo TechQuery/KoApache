@@ -30,19 +30,20 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ProxyAgent">ProxyAgent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resourceFrom">resourceFrom</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getResourceOf">getResourceOf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-currentModulePath">currentModulePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-patternOf">patternOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">source/utility.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { readFileSync } from &apos;fs&apos;;
-
-import { get } from &apos;http&apos;;
 
 
 /**
@@ -62,17 +63,31 @@ export function configOf(name) {
 
 
 /**
- * HTTP `GET` method
+ * @param {Object} map - Key for RegExp source, value for replacement
  *
- * @param {string} URL
- *
- * @return {Promise&lt;IncomingMessage&gt;}
+ * @return {?Object} Key for replacement, value for RegExp
  */
-export function getResourceOf(URL) {
+export function patternOf(map) {
 
-    return  new Promise(
-        (resolve, reject)  =&gt;  get(URL, resolve).on(&apos;error&apos;, reject)
-    );
+    var patternMap = { }, count = 0;
+
+    for (let pattern in map)
+        patternMap[ map[ pattern ] ] = new RegExp( pattern ),  count++;
+
+    return  count ? patternMap : null;
+}
+
+
+/**
+ * @return {string}
+ */
+export function currentModulePath() {
+
+    try {  throw Error();  } catch (error) {
+
+        return  error.stack.split( /[\r\n]+/ )[2]
+            .match( /at .+?\((.+):\d+:\d+\)/ )[1];
+    }
 }
 </code></pre>
 
