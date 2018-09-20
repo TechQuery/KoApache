@@ -31,10 +31,6 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ProxyAgent">ProxyAgent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resourceFrom">resourceFrom</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-currentModulePath">currentModulePath</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-patternOf">patternOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
@@ -47,11 +43,7 @@
 
 import { createReadStream } from &apos;fs&apos;;
 
-import { parse } from &apos;url&apos;;
-
-import { request } from &apos;http&apos;;
-
-import {request as requestS} from &apos;https&apos;;
+import { request } from &apos;@tech_query/node-toolkit&apos;;
 
 
 /**
@@ -85,46 +77,6 @@ function buildData(context) {
 
 
 /**
- * HTTP(S) request
- *
- * @param {string|URL}           URL
- * @param {string}               [method=&apos;GET&apos;]
- * @param {Object}               [header]
- * @param {string|Object|Buffer} [body]
- *
- * @return {Promise&lt;IncomingMessage&gt;} HTTP(S) response
- */
-export function resourceFrom(URL,  method = &apos;GET&apos;,  header,  body) {
-
-    if (typeof URL === &apos;string&apos;)  URL = parse( URL );
-
-    const option = {
-            method,
-            headers:  Object.assign({
-                Accept:        &apos;*/*&apos;,
-                &apos;User-Agent&apos;:  `Node.JS ${process.version}`
-            }, header)
-        },
-        client = (URL.protocol[4] !== &apos;s&apos;) ? request : requestS;
-
-    if ((body instanceof Object)  &amp;&amp;  !(body instanceof Buffer)) {
-
-        option.headers[&apos;Content-Type&apos;] = &apos;application/json&apos;;
-
-        body = JSON.stringify( body );
-    }
-
-    for (let key in URL)
-        if (URL[ key ]  &amp;&amp;  !(URL[key] instanceof Function))
-            option[key] = URL[key];
-
-    return  new Promise((resolve, reject) =&gt;
-        client(option, resolve).on(&apos;error&apos;, reject).end( body )
-    );
-}
-
-
-/**
  * @param {string}  URL
  * @param {Context} context
  *
@@ -136,7 +88,7 @@ async function pipe(URL, context) {
 
     delete header.host;
 
-    const response = await resourceFrom(
+    const response = await request(
         URL,  context.method,  header,  buildData( context )
     );
 
@@ -167,7 +119,7 @@ export default  function (proxyMap) {
      */
     return  async function (context, next) {
 
-        const URL = context.path;
+        const URL = context.path + context.request.search;
 
         for (let path in proxyMap) {
 

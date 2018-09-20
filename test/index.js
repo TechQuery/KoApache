@@ -1,6 +1,4 @@
-import { configOf } from '../source/utility';
-
-import { resourceFrom } from '../source/ProxyAgent';
+import { configOf, request } from '@tech_query/node-toolkit';
 
 import WebServer from '../source/WebServer';
 
@@ -41,7 +39,7 @@ describe('Server core',  () => {
             server.localHost().on('listening', resolve).on('error', reject)
         );
 
-        const response = await resourceFrom( server.URL );
+        const response = await request( server.URL );
 
         response.should.be.html();
     });
@@ -51,7 +49,7 @@ describe('Server core',  () => {
      */
     it('Reverse proxy',  async () => {
 
-        const response = await resourceFrom(`${server.URL}/github/users/TechQuery`);
+        const response = await request(`${server.URL}/github/users/TechQuery`);
 
         response.should.be.json();
     });

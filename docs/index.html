@@ -31,10 +31,6 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ProxyAgent">ProxyAgent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resourceFrom">resourceFrom</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-currentModulePath">currentModulePath</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-patternOf">patternOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
@@ -56,8 +52,8 @@
 </li>
 <li><p><strong>Reverse proxy</strong> can be configurated in <code>package.json</code></p>
 <ul>
-<li><a href="https://github.com/TechQuery/KoApache/blob/master/source/utility.js#L11">Parse rule</a></li>
-<li><a href="https://github.com/TechQuery/KoApache/blob/master/package.json#L69">Example</a></li>
+<li><a href="https://techquery.github.io/node-toolkit/function/index.html#static-function-configOf">Parse rule</a></li>
+<li><a href="https://github.com/TechQuery/KoApache/blob/master/package.json#L73">Example</a></li>
 </ul>
 </li>
 <li><p>Support to open <code>http://your_LAN_IP:port/</code> in your default browser on Command-line mode</p>
@@ -66,17 +62,15 @@
 <h2 id="usage">Usage</h2><h3 id="command-line">Command-line</h3><pre><code class="lang-Shell"><code class="source-code prettyprint">web-server ./path/of/public/folder/</code>
 </code></pre>
 <p>Help information output from <code>web-server -h</code>:</p>
-<pre><code><code class="source-code prettyprint">Usage: command [options] [dir]
-
-A Web server which is easy to use in command-line or as a forked Child process based on Koa
+<pre><code><code class="source-code prettyprint">Usage: koapache-cli [options] [dir]
 
 Options:
 
-  -V, --version       output the version number
-  -p, --port &lt;value&gt;  Listening port number (support Environment variable name)
-  --CORS              Enable CORS middleware
-  -o, --open [path]   Open the Index or specific page in default browser
-  -h, --help          output usage information</code>
+    -V, --version       output the version number
+    -p, --port &lt;value&gt;  Listening port number (support Environment variable name)
+    --CORS              Enable CORS middleware
+    -o, --open [path]   Open the Index or specific page in default browser
+    -h, --help          output usage information</code>
 </code></pre><h3 id="module">Module</h3><pre><code class="lang-JavaScript"><code class="source-code prettyprint">import WebServer from &apos;koapache&apos;;
 
 const server = new WebServer(

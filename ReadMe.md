@@ -19,8 +19,8 @@ A Web server which is easy to use in command-line or as a forked Child process b
  4. Support **CORS** headers
 
  5. **Reverse proxy** can be configurated in `package.json`
-    - [Parse rule](https://github.com/TechQuery/KoApache/blob/master/source/utility.js#L11)
-    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L69)
+    - [Parse rule](https://techquery.github.io/node-toolkit/function/index.html#static-function-configOf)
+    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L73)
 
  6. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode
 
@@ -35,17 +35,15 @@ web-server ./path/of/public/folder/
 ```
 Help information output from `web-server -h`:
 
-    Usage: command [options] [dir]
-
-    A Web server which is easy to use in command-line or as a forked Child process based on Koa
+    Usage: koapache-cli [options] [dir]
 
     Options:
 
-      -V, --version       output the version number
-      -p, --port <value>  Listening port number (support Environment variable name)
-      --CORS              Enable CORS middleware
-      -o, --open [path]   Open the Index or specific page in default browser
-      -h, --help          output usage information
+        -V, --version       output the version number
+        -p, --port <value>  Listening port number (support Environment variable name)
+        --CORS              Enable CORS middleware
+        -o, --open [path]   Open the Index or specific page in default browser
+        -h, --help          output usage information
 
 
 ### Module
