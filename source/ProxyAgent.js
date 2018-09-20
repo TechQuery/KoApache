@@ -2,11 +2,7 @@ import FormData from 'form-data';
 
 import { createReadStream } from 'fs';
 
-import { parse } from 'url';
-
-import { request } from 'http';
-
-import {request as requestS} from 'https';
+import { request } from '@tech_query/node-toolkit';
 
 
 /**
@@ -40,46 +36,6 @@ function buildData(context) {
 
 
 /**
- * HTTP(S) request
- *
- * @param {string|URL}           URL
- * @param {string}               [method='GET']
- * @param {Object}               [header]
- * @param {string|Object|Buffer} [body]
- *
- * @return {Promise<IncomingMessage>} HTTP(S) response
- */
-export function resourceFrom(URL,  method = 'GET',  header,  body) {
-
-    if (typeof URL === 'string')  URL = parse( URL );
-
-    const option = {
-            method,
-            headers:  Object.assign({
-                Accept:        '*/*',
-                'User-Agent':  `Node.JS ${process.version}`
-            }, header)
-        },
-        client = (URL.protocol[4] !== 's') ? request : requestS;
-
-    if ((body instanceof Object)  &&  !(body instanceof Buffer)) {
-
-        option.headers['Content-Type'] = 'application/json';
-
-        body = JSON.stringify( body );
-    }
-
-    for (let key in URL)
-        if (URL[ key ]  &&  !(URL[key] instanceof Function))
-            option[key] = URL[key];
-
-    return  new Promise((resolve, reject) =>
-        client(option, resolve).on('error', reject).end( body )
-    );
-}
-
-
-/**
  * @param {string}  URL
  * @param {Context} context
  *
@@ -91,7 +47,7 @@ async function pipe(URL, context) {
 
     delete header.host;
 
-    const response = await resourceFrom(
+    const response = await request(
         URL,  context.method,  header,  buildData( context )
     );
 
@@ -122,7 +78,7 @@ export default  function (proxyMap) {
      */
     return  async function (context, next) {
 
-        const URL = context.path;
+        const URL = context.path + context.request.search;
 
         for (let path in proxyMap) {
 

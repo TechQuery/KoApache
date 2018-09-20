@@ -1,8 +1,8 @@
-import 'babel-polyfill';
+import '@babel/polyfill';
 
 import Koa from 'koa';
 
-import { patternOf, currentModulePath } from './utility';
+import { patternOf, currentModulePath } from '@tech_query/node-toolkit';
 
 import Logger from 'koa-logger';
 

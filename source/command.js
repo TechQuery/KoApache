@@ -2,16 +2,10 @@ import Commander from 'commander';
 
 import WebServer from './WebServer';
 
-import { join } from 'path';
-
-import { readFileSync } from 'fs';
-
-import { configOf } from './utility';
+import { packageOf, currentModulePath, configOf } from '@tech_query/node-toolkit';
 
 
-const manifest = JSON.parse(
-        readFileSync( join(process.argv[1], '../../package.json') )
-    ),
+const manifest = packageOf( currentModulePath() ).meta,
     config = configOf('koapache') || { };
 
 Commander

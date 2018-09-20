@@ -31,10 +31,6 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/source/WebServer.js~WebServer.html">WebServer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ProxyAgent">ProxyAgent</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resourceFrom">resourceFrom</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configOf">configOf</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-currentModulePath">currentModulePath</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-patternOf">patternOf</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ServerAddress">ServerAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/context.md">Context</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/koajs/koa/blob/master/docs/api/index.md#application">Application</a></span></span></li>
@@ -47,16 +43,10 @@
 
 import WebServer from &apos;./WebServer&apos;;
 
-import { join } from &apos;path&apos;;
-
-import { readFileSync } from &apos;fs&apos;;
-
-import { configOf } from &apos;./utility&apos;;
+import { packageOf, currentModulePath, configOf } from &apos;@tech_query/node-toolkit&apos;;
 
 
-const manifest = JSON.parse(
-        readFileSync( join(process.argv[1], &apos;../../package.json&apos;) )
-    ),
+const manifest = packageOf( currentModulePath() ).meta,
     config = configOf(&apos;koapache&apos;) || { };
 
 Commander

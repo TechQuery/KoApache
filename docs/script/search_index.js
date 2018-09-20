@@ -12,87 +12,33 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "koapache/source/utility.js~configof",
-    "function/index.html#static-function-configOf",
-    "<span>configOf</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
-    "function"
-  ],
-  [
-    "koapache/source/utility.js~currentmodulepath",
-    "function/index.html#static-function-currentModulePath",
-    "<span>currentModulePath</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
-    "function"
-  ],
-  [
-    "koapache/source/utility.js~patternof",
-    "function/index.html#static-function-patternOf",
-    "<span>patternOf</span> <span class=\"search-result-import-path\">koapache/source/utility.js</span>",
-    "function"
-  ],
-  [
-    "koapache/source/proxyagent.js~resourcefrom",
-    "function/index.html#static-function-resourceFrom",
-    "<span>resourceFrom</span> <span class=\"search-result-import-path\">koapache/source/ProxyAgent.js</span>",
-    "function"
-  ],
-  [
     "webserver source/webserver.js~webserver,webserver",
-    "test-file/test/WebServer.js.html#lineNumber11",
+    "test-file/test/index.js.html#lineNumber9",
     "Server core",
     "test"
   ],
   [
     "webserver#workerhost source/webserver.js~webserver#workerhost,webserver#workerhost",
-    "test-file/test/WebServer.js.html#lineNumber62",
+    "test-file/test/index.js.html#lineNumber60",
     "Server core Host in a worker process",
     "test"
   ],
   [
     "webserver#boot webserver#localhost source/webserver.js~webserver#boot,webserver#boot source/webserver.js~webserver#localhost,webserver#localhost",
-    "test-file/test/WebServer.js.html#lineNumber36",
+    "test-file/test/index.js.html#lineNumber34",
     "Server core Middlewares for Static files",
     "test"
   ],
   [
     "proxyagent source/proxyagent.js~proxyagent,proxyagent",
-    "test-file/test/WebServer.js.html#lineNumber52",
+    "test-file/test/index.js.html#lineNumber50",
     "Server core Reverse proxy",
     "test"
   ],
   [
     "webserver#url webserver#openurl source/webserver.js~webserver#url,webserver#url source/webserver.js~webserver#openurl,webserver#openurl",
-    "test-file/test/WebServer.js.html#lineNumber18",
+    "test-file/test/index.js.html#lineNumber16",
     "Server core URL getters",
-    "test"
-  ],
-  [
-    "",
-    "test-file/test/utility.js.html#lineNumber7",
-    "Utility",
-    "test"
-  ],
-  [
-    "configof source/utility.js~configof,configof",
-    "test-file/test/utility.js.html#lineNumber13",
-    "Utility Get configuration from \"package.json\"",
-    "test"
-  ],
-  [
-    "currentmodulepath source/utility.js~currentmodulepath,currentmodulepath",
-    "test-file/test/utility.js.html#lineNumber37",
-    "Utility Get path of current module",
-    "test"
-  ],
-  [
-    "resourcefrom source/proxyagent.js~resourcefrom,resourcefrom",
-    "test-file/test/utility.js.html#lineNumber45",
-    "Utility HTTP(S) request",
-    "test"
-  ],
-  [
-    "patternof source/utility.js~patternof,patternof",
-    "test-file/test/utility.js.html#lineNumber27",
-    "Utility Map String config to RegExp edition",
     "test"
   ],
   [
@@ -498,21 +444,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "source/utility.js",
-    "file/source/utility.js.html",
-    "source/utility.js",
-    "file"
-  ],
-  [
-    "test/webserver.js",
-    "test-file/test/WebServer.js.html",
-    "test/WebServer.js",
-    "testFile"
-  ],
-  [
-    "test/utility.js",
-    "test-file/test/utility.js.html",
-    "test/utility.js",
+    "test/index.js",
+    "test-file/test/index.js.html",
+    "test/index.js",
     "testFile"
   ]
 ]
