@@ -1,5 +1,3 @@
-import '@babel/polyfill';
-
 import Koa from 'koa';
 
 import { patternOf, currentModulePath } from '@tech_query/node-toolkit';
@@ -168,7 +166,7 @@ export default  class WebServer {
     workerHost() {
 
         const child = fork(
-            join(currentModulePath(), '../../dist/koapache-cli'),
+            join(currentModulePath(), '../../dist/'),
             [this.staticPath,  '-p',  this.netPort,  this.XDomain && '--CORS'],
             {execArgv:  [ ]}
         );

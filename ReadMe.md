@@ -1,8 +1,10 @@
 # KoApache
 
-A Web server which is easy to use in command-line or as a forked Child process based on [Koa](http://koajs.com/).
+A Web server which is easy to use in Command-line or as a forked Child process based on [Koa](http://koajs.com/).
 
 [![NPM Dependency](https://david-dm.org/TechQuery/KoApache.svg)](https://david-dm.org/TechQuery/KoApache)
+
+[![Build Status](https://travis-ci.com/TechQuery/KoApache.svg?branch=master)](https://travis-ci.com/TechQuery/KoApache)
 
 [![NPM](https://nodei.co/npm/koapache.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/koapache/)
 
@@ -19,7 +21,7 @@ A Web server which is easy to use in command-line or as a forked Child process b
  4. Support **CORS** headers
 
  5. **Reverse proxy** can be configurated in `package.json`
-    - [Parse rule](https://techquery.github.io/node-toolkit/function/index.html#static-function-configOf)
+    - [Parse rule](https://tech-query.me/node-toolkit/function/index.html#static-function-configOf)
     - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L73)
 
  6. Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode
@@ -35,10 +37,11 @@ web-server ./path/of/public/folder/
 ```
 Help information output from `web-server -h`:
 
-    Usage: koapache-cli [options] [dir]
+    Usage: web-server [dir] [options]
+
+    A Web server which is easy to use in Command-line or as a forked Child process based on Koa
 
     Options:
-
         -V, --version       output the version number
         -p, --port <value>  Listening port number (support Environment variable name)
         --CORS              Enable CORS middleware
@@ -62,7 +65,7 @@ const server = new WebServer(
 
 server.workerHost().then(address  =>  console.dir( address ));
 ```
-API document is accessed through `npm start` (offline), `npm docs` (online) or [Official Website](https://techquery.github.io/KoApache/).
+API document is accessed through `npm start` (offline), `npm docs` (online) or [Official Website](https://tech-query.me/KoApache/).
 
 
 

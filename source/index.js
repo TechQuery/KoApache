@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+import '@babel/polyfill';
+
 import Commander from 'commander';
 
 import WebServer from './WebServer';
@@ -11,9 +13,10 @@ const manifest = packageOf( currentModulePath() ).meta,
     config = configOf('koapache') || { };
 
 Commander
+    .name('web-server')
     .version( manifest.version )
     .description( manifest.description )
-    .arguments('[dir]')
+    .usage('[dir] [options]')
     .option(
         '-p, --port <value>',
         'Listening port number (support Environment variable name)'

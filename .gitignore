@@ -63,3 +63,4 @@ typings/
 
 # NPM production code
 dist/
+docs/
