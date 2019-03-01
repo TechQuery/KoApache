@@ -6,16 +6,18 @@ import Commander from 'commander';
 
 import WebServer from './WebServer';
 
-import { packageOf, currentModulePath, configOf } from '@tech_query/node-toolkit';
+import { configOf } from '@tech_query/node-toolkit';
+
+import manifest from '../package.json';
 
 
-const manifest = packageOf( currentModulePath() ).meta,
+const meta = JSON.parse( manifest ),
     config = configOf('koapache') || { };
 
 Commander
     .name('web-server')
-    .version( manifest.version )
-    .description( manifest.description )
+    .version( meta.version )
+    .description( meta.description )
     .usage('[dir] [options]')
     .option(
         '-p, --port <value>',

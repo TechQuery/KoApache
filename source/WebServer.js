@@ -124,6 +124,21 @@ export default  class WebServer {
     }
 
     /**
+     * @return   {Object}
+     * @property {String} family
+     * @property {String} address
+     */
+    static getIPA() {
+
+        const address = IP.v4.sync() || IP.v6.sync() || '127.0.0.1';
+
+        return {
+            family:  address.includes(':') ? 'IPv6' : 'IPv4',
+            address
+        };
+    }
+
+    /**
      * Create a server in the same Node.JS process
      *
      * @return {Server} HTTP server
@@ -134,10 +149,7 @@ export default  class WebServer {
 
         return  this.core.listen(this.netPort,  async function () {
 
-            server.address = Object.assign(this.address(), {
-                family:     'IPv4',
-                address:    IP.v4.sync()
-            });
+            server.address = Object.assign(this.address(), WebServer.getIPA());
 
             if ( process.send )
                 return  process.send({type: 'ready', data: server.address});

@@ -28,8 +28,9 @@ function buildData(context) {
     for (let key in request.fields)  form.append(key, request.fields[ key ]);
 
     for (let key in request.files)
-        for (let file  of  request.files[ key ])
-            form.append(key,  createReadStream( file.path ),  file.name);
+        request.files[ key ].forEach(file =>
+            form.append(key,  createReadStream( file.path ),  file.name)
+        );
 
     return form;
 }
