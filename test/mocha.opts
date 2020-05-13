@@ -1,7 +1,0 @@
---require @babel/register
---require @babel/polyfill
---require should
---require should-http
---no-timeouts
---colors
---inline-diffs

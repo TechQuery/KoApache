@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "esModuleInterop": true,
+        "lib": ["ES2019", "DOM"],
+        "outDir": "dist/"
+    },
+    "include": ["source/*.ts"],
+    "typedocOptions": {
+        "name": "KoApache",
+        "mode": "file",
+        "excludeExternals": true,
+        "excludeNotExported": true,
+        "readme": "./ReadMe.md",
+        "out": "docs/"
+    }
+}
