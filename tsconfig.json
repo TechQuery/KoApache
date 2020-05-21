@@ -4,10 +4,12 @@
         "module": "CommonJS",
         "moduleResolution": "Node",
         "esModuleInterop": true,
+        "jsx": "react",
+        "jsxFactory": "createCommand",
         "lib": ["ES2019", "DOM"],
         "outDir": "dist/"
     },
-    "include": ["source/*.ts"],
+    "include": ["source/*"],
     "typedocOptions": {
         "name": "KoApache",
         "mode": "file",

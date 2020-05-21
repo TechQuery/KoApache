@@ -34,16 +34,16 @@ web-server ./path/of/public/folder/
 
 Help information output from `web-server -h`:
 
-    Usage: web-server [dir] [options]
+    web-server [dir] [options]
 
     A Web server which is easy to use in Command-line or as a forked Child process based on Koa
 
     Options:
-        -V, --version       output the version number
-        -p, --port <value>  Listening port number (support Environment variable name)
-        --CORS              Enable CORS middleware
-        -o, --open [path]   Open the Index or specific page in default browser
-        -h, --help          output usage information
+      --CORS                  Enable CORS middleware
+      -h, --help              show Help information
+      -o, --open     [path]   Open the Index or specific page in default browser
+      -p, --port     <value>  Listening port number (support Environment variable name)
+      -v, --version           show Version number
 
 ### Module
 
