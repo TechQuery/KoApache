@@ -1,6 +1,6 @@
 import { configOf, request, readStream } from '@tech_query/node-toolkit';
 
-import WebServer from '../source/WebServer';
+import { WebServer } from '../source/WebServer';
 
 /**
  * @test {WebServer}
@@ -28,9 +28,9 @@ describe('Server core', () => {
             port: 80
         };
 
-        expect(server.URL).toBe('http://127.0.0.1:80');
+        expect(server.baseURL).toBe('http://127.0.0.1:80');
 
-        expect(server.openURL).toBe('http://127.0.0.1:80/test/');
+        expect(server.openURL).toBe('http://127.0.0.1/test/');
     });
 
     /**
@@ -44,7 +44,7 @@ describe('Server core', () => {
             server.localHost().on('listening', resolve).on('error', reject)
         );
 
-        const response = await readStream(await request(server.URL));
+        const response = await readStream(await request(server.baseURL));
 
         expect(typeof response === 'string').toBeTruthy();
     });
@@ -54,7 +54,7 @@ describe('Server core', () => {
      */
     it('Reverse proxy', async () => {
         const response = await readStream(
-            await request(`${server.URL}/github/users/TechQuery`)
+            await request(`${server.baseURL}/github/users/TechQuery`)
         );
         expect(typeof response === 'object').toBeTruthy();
     });

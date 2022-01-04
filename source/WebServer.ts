@@ -7,19 +7,19 @@ import Static from 'koa-static';
 import { AddressInfo } from 'net';
 import { v4, v6 } from 'internal-ip';
 import open from 'open';
-import { resolve } from 'url';
 import { join } from 'path';
 import { fork } from 'child_process';
 import { patternOf, currentModulePath } from '@tech_query/node-toolkit';
 
-import ProxyAgent from './ProxyAgent';
+import { ProxyAgent } from './ProxyAgent';
+export * from './ProxyAgent';
 
 interface WebServerMessage {
     type: string;
     data: Record<string, any>;
 }
 
-export default class WebServer {
+export class WebServer {
     staticPath?: string;
     netPort?: number;
     XDomain?: boolean;
@@ -64,7 +64,7 @@ export default class WebServer {
     /**
      * Origin URI
      */
-    get URL() {
+    get baseURL() {
         const { address: { address, port } = {} } = this;
 
         return address ? `http://${address}:${port}` : '';
@@ -74,9 +74,11 @@ export default class WebServer {
      * URL to open in default browser
      */
     get openURL() {
-        const { openPath, URL } = this;
+        const { openPath, baseURL } = this;
 
-        return typeof openPath !== 'string' ? URL : resolve(URL, openPath);
+        return typeof openPath !== 'string'
+            ? baseURL
+            : new URL(openPath, baseURL) + '';
     }
 
     static getIPA() {
@@ -107,9 +109,9 @@ export default class WebServer {
                         data: server.address
                     });
 
-                console.info(`Web server runs at ${server.URL}`);
+                console.info(`Web server runs at ${server.baseURL}`);
 
-                if (server.openPath) await open(server.openURL);
+                if (server.openPath) await open(server.openURL + '');
             })
             .on('error', error => {
                 if (process.send instanceof Function)

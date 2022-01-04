@@ -44,7 +44,7 @@ async function pipe(URL: string, context: Context) {
     return (context.body = response);
 }
 
-export default function (proxyMap: Record<string, RegExp>) {
+export function ProxyAgent(proxyMap: Record<string, RegExp>) {
     return async function (context: Context, next: Next) {
         const URL = context.path + context.request.search;
 

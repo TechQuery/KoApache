@@ -3,7 +3,7 @@
 import { configOf } from '@tech_query/node-toolkit';
 import { Command, createCommand } from 'commander-jsx';
 
-import WebServer from './WebServer';
+import { WebServer } from './WebServer';
 
 const config = configOf('koapache');
 
@@ -34,15 +34,17 @@ Command.execute(
                     'Open the Index or specific page in default browser'
             }
         }}
-        executor={({ port, CORS, open }: OptionData, staticPath: string) =>
+        executor={({ port, CORS, open }: OptionData, staticPath: string) => {
+            if (isNaN(+port)) port = process.env[port];
+
             new WebServer({
                 staticPath,
-                netPort: +(isNaN(+port) ? process.env[port] : port),
+                netPort: port ? +port : undefined,
                 XDomain: CORS,
                 proxyMap: config?.proxy,
                 openPath: open
-            }).localHost()
-        }
+            }).localHost();
+        }}
     />,
     process.argv.slice(2)
 );

@@ -1,6 +1,6 @@
 {
     "name": "koapache",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "description": "A Web server which is easy to use in Command-line or as a forked Child process based on Koa",
     "keywords": [
         "Web",
@@ -44,7 +44,7 @@
         "lint": "lint-staged",
         "pack": "rm -rf dist/  &&  tsc",
         "test": "npm run pack  &&  jest --forceExit",
-        "docs": "rm -rf docs/  &&  typedoc source/",
+        "docs": "rm -rf docs/  &&  typedoc source/WebServer.ts",
         "build": "npm run lint  &&  npm test  &&  npm run docs",
         "prepublishOnly": "npm run build",
         "start": "npm run docs  &&  node dist/ docs/ -o"
