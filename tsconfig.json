@@ -7,14 +7,14 @@
         "jsx": "react",
         "jsxFactory": "createCommand",
         "lib": ["ES2019", "DOM"],
+        "declaration": true,
         "outDir": "dist/"
     },
     "include": ["source/*"],
     "typedocOptions": {
         "name": "KoApache",
-        "mode": "file",
         "excludeExternals": true,
-        "excludeNotExported": true,
+        "excludePrivate": true,
         "readme": "./ReadMe.md",
         "out": "docs/"
     }

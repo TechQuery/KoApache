@@ -59,7 +59,7 @@ typings/
 .env
 
 # Editor & IDE configuration
-.vscode/
+.vscode/settings.json
 .idea/
 
 # NPM production code

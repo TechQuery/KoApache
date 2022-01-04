@@ -2,4 +2,6 @@
 .eslintrc.json
 test/
 docs/
-.travis.yml
+.github/
+.husky/
+.vscode/

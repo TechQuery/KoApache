@@ -7,10 +7,17 @@ import WebServer from './WebServer';
 
 const config = configOf('koapache');
 
+interface OptionData {
+    port: string;
+    CORS: boolean;
+    open: string | boolean;
+}
+
 Command.execute(
-    <web-server
+    <Command
+        name="web-server"
         parameters="[dir] [options]"
-        version="2.0.0"
+        version="2.2.0"
         description="A Web server which is easy to use in Command-line or as a forked Child process based on Koa"
         options={{
             port: {
@@ -27,10 +34,10 @@ Command.execute(
                     'Open the Index or specific page in default browser'
             }
         }}
-        executor={({ port, CORS, open }, staticPath: string) =>
+        executor={({ port, CORS, open }: OptionData, staticPath: string) =>
             new WebServer({
                 staticPath,
-                netPort: isNaN(port) ? process.env[port] : port,
+                netPort: +(isNaN(+port) ? process.env[port] : port),
                 XDomain: CORS,
                 proxyMap: config?.proxy,
                 openPath: open
