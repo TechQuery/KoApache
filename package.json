@@ -1,6 +1,6 @@
 {
     "name": "koapache",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "description": "A Web server which is easy to use in Command-line or as a forked Child process based on Koa",
     "keywords": [
         "Web",
@@ -26,6 +26,9 @@
     "bin": {
         "web-server": "dist/index.js"
     },
+    "engines": {
+        "node": ">=14"
+    },
     "prettier": {
         "tabWidth": 4,
         "trailingComma": "none",
@@ -50,34 +53,35 @@
         "start": "npm run docs  &&  node dist/ docs/ -o"
     },
     "dependencies": {
-        "@koa/cors": "^3.1.0",
-        "@tech_query/node-toolkit": "^1.1.0",
+        "@koa/cors": "^4.0.0",
+        "@tech_query/node-toolkit": "^1.2.0",
         "commander-jsx": "^0.6.1",
         "form-data": "^4.0.0",
         "internal-ip": "^6.2.0",
-        "koa": "^2.13.4",
-        "koa-body": "^4.2.0",
+        "koa": "^2.14.1",
+        "koa-body": "^6.0.1",
         "koa-logger": "^3.2.1",
         "koa-static": "^5.0.0",
-        "open": "^7.4.2"
+        "open": "^8.4.2"
     },
     "devDependencies": {
-        "@types/jest": "^27.4.0",
-        "@types/koa": "^2.13.4",
+        "@types/jest": "^29.5.0",
+        "@types/koa": "^2.13.6",
         "@types/koa-logger": "^3.1.2",
         "@types/koa-static": "^4.0.2",
-        "@types/koa__cors": "^3.1.1",
-        "@typescript-eslint/eslint-plugin": "^5.9.0",
-        "@typescript-eslint/parser": "^5.9.0",
-        "eslint": "^8.6.0",
-        "eslint-config-prettier": "^8.3.0",
-        "husky": "^7.0.4",
-        "jest": "^27.4.5",
-        "lint-staged": "^12.1.5",
-        "prettier": "^2.5.1",
-        "ts-jest": "^27.1.2",
-        "typedoc": "^0.22.10",
-        "typescript": "^4.5.4"
+        "@types/koa__cors": "^4.0.0",
+        "@types/node": "^16.18.23",
+        "@typescript-eslint/eslint-plugin": "^5.57.1",
+        "@typescript-eslint/parser": "^5.57.1",
+        "eslint": "^8.37.0",
+        "eslint-config-prettier": "^8.8.0",
+        "husky": "^8.0.3",
+        "jest": "^29.5.0",
+        "lint-staged": "^13.2.0",
+        "prettier": "^2.8.7",
+        "ts-jest": "^29.1.0",
+        "typedoc": "^0.23.28",
+        "typescript": "~5.0.3"
     },
     "koapache": {
         "proxy": {

@@ -15,8 +15,8 @@ function buildData({ method, request: { type, body, files = {} } }: Context) {
     for (const [key, data] of Object.entries(files)) {
         const files = data instanceof Array ? data : [data];
 
-        for (const { path, name } of files)
-            form.append(key, createReadStream(path), name);
+        for (const { filepath, originalFilename } of files)
+            form.append(key, createReadStream(filepath), originalFilename);
     }
     return form;
 }

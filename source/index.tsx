@@ -17,7 +17,7 @@ Command.execute(
     <Command
         name="web-server"
         parameters="[dir] [options]"
-        version="2.2.0"
+        version="2.2.2"
         description="A Web server which is easy to use in Command-line or as a forked Child process based on Koa"
         options={{
             port: {

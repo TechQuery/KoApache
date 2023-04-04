@@ -3,7 +3,7 @@
 A Web server which is easy to use in Command-line or as a forked Child process based on [Koa][1].
 
 [![NPM Dependency](https://david-dm.org/TechQuery/KoApache.svg)][2]
-[![CI & CD](https://github.com/TechQuery/KoApache/workflows/CI%20&%20CD/badge.svg)][3]
+[![CI & CD](https://github.com/TechQuery/KoApache/actions/workflows/main.yml/badge.svg)][3]
 
 [![NPM](https://nodei.co/npm/koapache.png?downloads=true&downloadRank=true&stars=true)][4]
 
@@ -70,6 +70,6 @@ https://www.npmjs.com/package/koapache?activeTab=dependencies
 
 [1]: http://koajs.com/
 [2]: https://david-dm.org/TechQuery/KoApache
-[3]: https://github.com/TechQuery/KoApache/actions
+[3]: https://github.com/TechQuery/KoApache/actions/workflows/main.yml
 [4]: https://nodei.co/npm/koapache/
 [5]: https://tech-query.me/KoApache/
