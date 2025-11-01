@@ -2,10 +2,17 @@
 
 A Web server which is easy to use in Command-line or as a forked Child process based on [Koa][1].
 
-[![NPM Dependency](https://david-dm.org/TechQuery/KoApache.svg)][2]
+[![NPM Dependency](https://img.shields.io/librariesio/github/TechQuery/KoApache.svg)][2]
 [![CI & CD](https://github.com/TechQuery/KoApache/actions/workflows/main.yml/badge.svg)][3]
 
 [![NPM](https://nodei.co/npm/koapache.png?downloads=true&downloadRank=true&stars=true)][4]
+
+## Versions
+
+| SemVer |    status    | Node.js |   Koa    |
+| :----: | :----------: | :-----: | :------: |
+| `>=3`  | ✅developing | `>=20`  |  `>=3`   |
+|  `<3`  | ❌deprecated | `>=14`  | `>=2 <3` |
 
 ## Feature
 
@@ -19,8 +26,8 @@ A Web server which is easy to use in Command-line or as a forked Child process b
 
 5.  **Reverse proxy** can be configurated in `package.json`
 
-    -   [Parse rule](https://tech-query.me/node-toolkit/globals.html#configof)
-    -   [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L90)
+    - [Parse rule](https://tech-query.me/node-toolkit/functions/configOf.html)
+    - [Example](https://github.com/TechQuery/KoApache/blob/master/package.json#L68-72)
 
 6.  Support to open `http://your_LAN_IP:port/` in your default browser on Command-line mode
 
@@ -69,7 +76,7 @@ API document is accessed through `npm start` (offline), `npm docs` (online) or [
 https://www.npmjs.com/package/koapache?activeTab=dependencies
 
 [1]: http://koajs.com/
-[2]: https://david-dm.org/TechQuery/KoApache
+[2]: https://libraries.io/npm/koapache
 [3]: https://github.com/TechQuery/KoApache/actions/workflows/main.yml
-[4]: https://nodei.co/npm/koapache/
+[4]: https://www.npmjs.com/package/koapache
 [5]: https://tech-query.me/KoApache/

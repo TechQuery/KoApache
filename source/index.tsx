@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 import { configOf } from '@tech_query/node-toolkit';
-import { Command, createCommand } from 'commander-jsx';
+import { Command } from 'commander-jsx';
 
 import { WebServer } from './WebServer';
 
@@ -23,15 +23,13 @@ Command.execute(
             port: {
                 shortcut: 'p',
                 parameters: '<value>',
-                description:
-                    'Listening port number (support Environment variable name)'
+                description: 'Listening port number (support Environment variable name)'
             },
             CORS: { description: 'Enable CORS middleware' },
             open: {
                 shortcut: 'o',
                 parameters: '[path]',
-                description:
-                    'Open the Index or specific page in default browser'
+                description: 'Open the Index or specific page in default browser'
             }
         }}
         executor={({ port, CORS, open }: OptionData, staticPath: string) => {
