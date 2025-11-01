@@ -1,4 +1,4 @@
-import { configOf, request, readStream } from '@tech_query/node-toolkit';
+import { configOf } from '@tech_query/node-toolkit';
 
 import { WebServer } from '../source/WebServer';
 
@@ -44,7 +44,7 @@ describe('Server core', () => {
             server.localHost().on('listening', resolve).on('error', reject)
         );
 
-        const response = await readStream(await request(server.baseURL));
+        const response = await (await fetch(server.baseURL)).text();
 
         expect(typeof response === 'string').toBeTruthy();
     });
@@ -53,9 +53,8 @@ describe('Server core', () => {
      * @test {ProxyAgent}
      */
     it('Reverse proxy', async () => {
-        const response = await readStream(
-            await request(`${server.baseURL}/github/users/TechQuery`)
-        );
+        const response = await (await fetch(`${server.baseURL}/github/users/TechQuery`)).json();
+
         expect(typeof response === 'object').toBeTruthy();
     });
 

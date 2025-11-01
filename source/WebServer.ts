@@ -14,9 +14,9 @@ import { patternOf, currentModulePath } from '@tech_query/node-toolkit';
 import { ProxyAgent } from './ProxyAgent';
 export * from './ProxyAgent';
 
-interface WebServerMessage {
+interface WebServerMessage<T = Record<string, unknown>> {
     type: string;
-    data: Record<string, any>;
+    data: T;
 }
 
 export class WebServer {
@@ -51,10 +51,11 @@ export class WebServer {
     private boot() {
         this.core.use(Logger());
 
-        if (this.proxyMap)
-            this.core
-                .use(Body({ multipart: true }))
-                .use(ProxyAgent(this.proxyMap));
+        if (this.proxyMap) this.core.use(ProxyAgent(this.proxyMap));
+
+        // Keep body parser for potential non-proxy routes; place after proxy to avoid
+        // consuming request bodies that should be streamed to the upstream.
+        this.core.use(Body({ multipart: true }));
 
         if (this.XDomain) this.core.use(CORS());
 
@@ -76,9 +77,7 @@ export class WebServer {
     get openURL() {
         const { openPath, baseURL } = this;
 
-        return typeof openPath !== 'string'
-            ? baseURL
-            : new URL(openPath, baseURL) + '';
+        return typeof openPath !== 'string' ? baseURL : new URL(openPath, baseURL) + '';
     }
 
     static getIPA() {
@@ -129,26 +128,20 @@ export class WebServer {
     workerHost() {
         const child = fork(
             join(currentModulePath(), '../../dist/'),
-            [
-                this.staticPath,
-                '-p',
-                this.netPort + '',
-                this.XDomain && '--CORS'
-            ],
+            [this.staticPath, '-p', this.netPort + '', this.XDomain && '--CORS'],
             { execArgv: [] }
         );
 
         return new Promise<AddressInfo>((resolve, reject) =>
-            child.on('message', ({ type, data }: WebServerMessage) => {
+            child.on('message', ({ type, data }: WebServerMessage<AddressInfo | Error>) => {
                 switch (type) {
                     case 'ready':
                         return resolve(data as AddressInfo);
                     case 'error': {
                         const { name, message, ...rest } = data as Error;
+                        const error = new globalThis[name](message);
 
-                        reject(
-                            Object.assign(new globalThis[name](message), rest)
-                        );
+                        reject(Object.assign(error, rest));
                     }
                 }
             })

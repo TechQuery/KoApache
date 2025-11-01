@@ -4,9 +4,10 @@
         "module": "CommonJS",
         "moduleResolution": "Node",
         "esModuleInterop": true,
-        "jsx": "react",
-        "jsxFactory": "createCommand",
-        "lib": ["ES2019", "DOM"],
+        "jsx": "react-jsx",
+        "jsxImportSource": "commander-jsx",
+        "lib": ["ES2019", "DOM", "DOM.Iterable"],
+        "skipLibCheck": true,
         "declaration": true,
         "outDir": "dist/"
     },
